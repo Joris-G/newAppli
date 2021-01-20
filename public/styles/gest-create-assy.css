@@ -1,0 +1,16 @@
+@import "../styles/defaultStyle.css";
+.divOrdo,
+.divOrdoChild {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.divOrdo label {
+    margin-top: 20px;
+}
+
+.divOrdoChild {
+    display: flex;
+    flex-direction: column;
+}

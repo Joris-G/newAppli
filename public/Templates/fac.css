@@ -1,0 +1,150 @@
+@font-face {
+    font-family: 'Goldman';
+    src: url('../src/font/Goldman-Regular.ttf');
+    /* font-family: "Raleway";
+    src: url('../src/font/Raleway-Regular.ttf'); */
+}
+
+@page {}
+
+@media print {
+    .header {
+        display: table-header-group;
+    }
+    .footer {
+        display: table-footer-group;
+    }
+}
+
+:root {
+    user-select: none;
+    --perso-bg-img: url("../src/img/fond.jpg");
+    --perso-color-bleuDaher: rgb(0, 50, 95);
+    --perso-color-bleuDaher2: rgb(0, 13, 36);
+    --perso-color-bleuDaher3: 0, 13, 36;
+    --perso-color-rougeDaher: rgb(230, 0, 50);
+    --perso-color-whiteFont: rgb(255, 255, 255);
+    --perso-color-green: rgb(0, 202, 61);
+    --perso-color-green2: rgb(73, 230, 120);
+    --perso-font-daher: 'Raleway';
+    font-size: 15px;
+}
+
+body {
+    font-family: 'Raleway';
+}
+
+
+/* HEADER */
+
+.header .firstRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .secondRow {
+    text-decoration: underline;
+    font-size: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+}
+
+.header .thirdRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    border: double 5px black;
+    padding: 5px;
+}
+
+.header .thirdRow>div {
+    width: 50%;
+    text-align: left;
+}
+
+.content {
+    width: 100%;
+}
+
+body>table {
+    width: 100%;
+}
+
+.header-group {
+    display: flex;
+    background-color: coral;
+    width: 100%;
+    padding: 5px;
+    page-break-before: always;
+    font-weight: bold;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-content: space-between;
+    border: double 4px black;
+    padding: 3px;
+    margin: 10px 0;
+    page-break-inside: avoid;
+}
+
+.type {
+    text-decoration: underline;
+}
+
+.instruction {
+    text-align: center;
+}
+
+.stepContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.stepContent table {
+    margin: 5px;
+    border: 1px solid black;
+    text-align: center;
+    padding: 2px 5px;
+    margin: 10px 0;
+    border-spacing: 5px;
+}
+
+.signature {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.operator {
+    display: flex;
+    flex-direction: column;
+}
+
+.opName {
+    grid-area: opName;
+}
+
+.opDate {
+    grid-area: opDate;
+}
+
+.sanction {
+    display: flex;
+    flex-direction: column;
+}
+
+.sanctionDate {
+    grid-area: sanctionDate;
+}
+
+.sanctionValue {
+    grid-area: sanctionValue;
+}

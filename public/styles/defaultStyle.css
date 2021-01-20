@@ -1,0 +1,397 @@
+@import "./menu.css";
+@import "./perso-button.css";
+@font-face {
+    font-family: 'Goldman';
+    src: url('../src/font/Goldman-Regular.ttf');
+    /* font-family: "Raleway";
+    src: url('../src/font/Raleway-Regular.ttf'); */
+}
+
+@font-face {
+    font-family: 'Goldman';
+    src: url('../src/font/Goldman-Regular.ttf');
+    unicode-range: U+0030-0039;
+}
+
+:root {
+    user-select: none;
+    --perso-bg-img: url("../src/img/fond.jpg");
+    --perso-color-bleuDaher: rgb(0, 50, 95);
+    --perso-color-bleuDaher2: rgb(0, 13, 36);
+    --perso-color-bleuDaher3: 0, 13, 36;
+    --perso-color-rougeDaher: rgb(230, 0, 50);
+    --perso-color-whiteFont: rgb(255, 255, 255);
+    --perso-color-green: rgb(0, 202, 61);
+    --perso-color-green2: rgb(73, 230, 120);
+    --perso-font-daher: 'Raleway';
+    font-size: 15px;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.underligne-red {
+    text-decoration: underline solid red;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+}
+
+.align-right {
+    justify-content: right;
+}
+
+.align-center {
+    justify-content: center;
+}
+
+.separator {
+    border: solid 1px rgba(var(--perso-color-bleuDaher3), 0.2);
+    margin: 8px 0;
+    width: 100%;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 100%;
+    background-image: var(--perso-bg-img);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    margin: 0;
+    padding: 0px;
+    font-family: 'Raleway';
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.hidden {
+    position: absolute;
+    left: -10000em;
+    top: auto;
+    width: 1px;
+    height: 1px;
+}
+
+.middleScreen {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.title-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: left;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.25);
+    height: 5%;
+}
+
+.title-font {
+    justify-self: center;
+    font-size: 30px;
+    color: white;
+}
+
+#global-progress {
+    justify-self: right;
+}
+
+.leftSideBar {
+    margin: 10px;
+    border-radius: 10px;
+    min-width: 150px;
+    width: 10%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.leftSideBar input {
+    width: 100px;
+}
+
+.workWindow {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.step-done {
+    background-color: green;
+}
+
+.module {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 50px);
+}
+
+.content {
+    display: flex;
+    order: 2;
+    flex-direction: row;
+    height: 90%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.redHover:hover {
+    background-color: var(--perso-color-rougeDaher);
+}
+
+.hide {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+
+/*LABEL*/
+
+label {
+    text-decoration: underline;
+    font-weight: lighter;
+}
+
+.fontWeightFlash {
+    animation-duration: 2s;
+    animation-name: fontWeightFlash;
+    animation-iteration-count: infinite;
+    transition: ease-out;
+}
+
+@keyframes fontWeightFlash {
+    from {
+        opacity: 1;
+    }
+    50% {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 2.5px;
+}
+
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 2.5px;
+}
+
+select {
+    height: 20px;
+}
+
+.perso-bouton {
+    align-items: center;
+    text-align: center;
+    padding: 5px;
+    height: 35px;
+    width: fit-content;
+}
+
+.bouton-disable {
+    color: grey;
+    box-shadow: black;
+    pointer-events: none;
+}
+
+.bouton-enable {
+    border: 1px solid white;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 16px solid #f3f3f3;
+    /* Light grey */
+    border-top: 16px solid var(--perso-color-bleuDaher);
+    border-left: 16px solid var(--perso-color-rougeDaher);
+    /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.sanction-choice {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+    background-color: rgba(var(--perso-color-bleuDaher3), 0.2);
+}
+
+
+/* MODAL */
+
+
+/* The Modal (background) */
+
+.modal {
+    display: block;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.modal p {
+    color: black;
+    font-size: 1.5em;
+}
+
+.modal h2 {
+    text-transform: uppercase;
+    font-weight: bolder;
+}
+
+
+/* Modal Header */
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* Modal Body */
+
+.modal-body {
+    padding: 2px 16px;
+}
+
+.modal .button-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+
+/* Modal Footer */
+
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+
+/* Modal Content */
+
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+
+/* Add Animation */
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+.delete {
+    color: var(--perso-color-rougeDaher);
+    text-decoration: line-through;
+}
+
+.tbl-img {
+    height: 30px;
+}

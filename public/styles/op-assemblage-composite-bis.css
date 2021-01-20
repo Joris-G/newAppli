@@ -1,0 +1,343 @@
+@import "../styles/defaultStyle.css";
+
+/* GROUPES */
+
+.divGroupStatus {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    cursor: pointer;
+}
+
+.divGroupStatus::-webkit-scrollbar {
+    display: none;
+}
+
+.divGroupStatus div.textArrow {
+    position: relative;
+    top: -100px;
+    width: 100%;
+    text-align: center;
+}
+
+
+/* LISTE OPE GROUPE */
+
+.section-operations {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px;
+    align-items: center;
+}
+
+.section-group-operations {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+}
+
+.group-operations {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* overflow-y: scroll; */
+}
+
+.current-group-operations {
+    /* display: flex; */
+    border-width: thick;
+}
+
+
+/* OPERATIONS DANS GROUPE OPERATION */
+
+.group-operation {
+    justify-content: left;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    border: rgba(255, 255, 255, 0.25) solid 1px;
+}
+
+.group-operation img {
+    align-items: center;
+    height: 30px;
+    margin: 5px;
+}
+
+.group-operation:hover {
+    background-color: white;
+    color: var(--perso-color-bleuDaher2);
+}
+
+.group-operation1 {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+.round {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.current-operation {
+    border-color: cyan;
+    background: cyan;
+}
+
+
+/* OPERATEUR OPERATION */
+
+.operation {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.operation #confirm-button {
+    align-self: flex-end;
+    justify-self: flex-end;
+}
+
+.op-operation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.operation-top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+}
+
+.sanction-choice {
+    order: 2;
+}
+
+.operation_details table {
+    order: 1;
+}
+
+.groupe-title {
+    margin-left: 10px;
+    font-size: 2em;
+    width: 100%;
+}
+
+.operation-top-bar img {
+    align-items: flex-end;
+    height: 40px;
+}
+
+.operation-type {
+    margin: 8px;
+    display: flex;
+    flex-direction: column;
+    color: black;
+}
+
+
+/* TABLEAUX */
+
+table {
+    background-color: rgba(255, 255, 255, 0.85);
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1.5rem;
+    min-width: 200px;
+    border-radius: 5px 5px 0 0;
+}
+
+table thead tr {
+    background-color: var(--perso-color-bleuDaher);
+    color: #fff;
+    text-align: left;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+table thead,
+table td {
+    padding: 6px 15px;
+    margin: 5px 0;
+}
+
+table tbody tr#item:hover {
+    font-weight: bold;
+    background-color: #009879;
+}
+
+table tbody tr {
+    color: var(--perso-color-bleuDaher);
+    font-weight: 600;
+}
+
+table tbody .full {
+    color: var(--perso-color-green);
+    font-weight: 700;
+}
+
+.groupDesc {
+    color: var(--perso-color-bleuDaher);
+    font-size: 1.5em;
+    font-weight: 700;
+    text-decoration: underline;
+    margin-bottom: 25px;
+}
+
+.op-conform {
+    background-color: var(--perso-color-green);
+}
+
+.op-not-conform {
+    background-color: var(--perso-color-rougeDaher);
+}
+
+.op-not-initiated {
+    background-color: rgba(var(--perso-color-bleuDaher3), 0.25);
+}
+
+#editeur {
+    width: 500px;
+    height: 200px;
+    border: 1px solid black;
+    padding: 5px;
+    overflow: auto;
+}
+
+.recorded-traca {
+    border: 2px solid var(--perso-color-green);
+}
+
+#tool {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#used-tool {
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+#used-tool>div {
+    display: flex;
+    flex-direction: column;
+}
+
+#used-tool label {
+    background-color: var(--perso-color-bleuDaher2);
+    color: white;
+}
+
+#used-tool>div>div {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--perso-color-bleuDaher2);
+}
+
+.inactive {
+    display: none;
+}
+
+.trGroup {
+    background-color: grey;
+    color: var(--perso-color-bleuDaher2);
+}
+
+.out-of-date {
+    color: red;
+    font-weight: bold;
+}
+
+.operation-instruction {
+    font-size: 2em;
+    margin: 50px;
+}
+
+#id-btn-scan {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.leftSideBar {
+    width: 30%;
+    font-size: 1.2em;
+}
+
+.content {
+    height: 100%;
+}
+
+.flashScan {
+    animation-duration: 1.5s;
+    animation-name: flashScan;
+    animation-iteration-count: infinite;
+    transition: ease-out;
+}
+
+@keyframes flashScan {
+    from {
+        background-color: red;
+    }
+    to {
+        background-color: white;
+    }
+}
+
+.info {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    transform: translateY(40px);
+    background-color: white;
+    overflow: hidden;
+    height: 200px;
+    width: 300px;
+}
+
+.group-operation:hover .info {
+    display: flex;
+}
+
+.rightSideBar {
+    order: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    margin: 10px;
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 10px;
+}
+
+.leftSideBarTitle,
+.OperationTitle {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}

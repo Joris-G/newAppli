@@ -1,0 +1,48 @@
+@import "../styles/defaultStyle.css";
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: var(--perso-bg-img);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Raleway';
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    border: solid 2px;
+    border-color: var(--perso-color-rougeDaher);
+    width: fit-content;
+    margin: 10px;
+    padding: 50px;
+    height: fit-content;
+}
+
+.title {
+    text-align: center;
+    font-size: 2em;
+}
+
+.authentifications {
+    display: flex;
+    flex-direction: row;
+}
+
+.authentifications>div {
+    width: 50%;
+}
+
+.login-mdp {
+    display: flex;
+    flex-direction: column;
+}

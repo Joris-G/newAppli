@@ -1,0 +1,70 @@
+@page {
+    size: A4;
+}
+
+@media print {
+    html,
+    body {
+        width: 210mm;
+        height: 297mm;
+    }
+    /* ... the rest of the rules ... */
+}
+
+body,
+html {
+    width: 210mm;
+    height: 297mm;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin: 12mm 8mm;
+    border: solid 1px black;
+}
+
+.hidden {
+    position: absolute;
+    left: -10000em;
+    top: auto;
+    width: 1px;
+    height: 1px;
+}
+
+#sticker-conteneur {
+    display: grid;
+    grid-template-columns: repeat(3, 63.5mm);
+    grid-row: auto;
+    gap: 0 2.5mm;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#sticker {
+    display: flex;
+    flex-direction: row;
+    padding: 3px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    border: solid 1px black;
+}
+
+#human-reading {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    font-size: 1em;
+}
+
+#qrcode {
+    padding: 3px;
+}

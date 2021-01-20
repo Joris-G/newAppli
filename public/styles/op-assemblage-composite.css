@@ -1,0 +1,210 @@
+    @import "../styles/defaultStyle.css";
+    .inactive {
+        display: none;
+    }
+    
+    .trGroup {
+        background-color: grey;
+        color: var(--perso-color-bleuDaher2);
+    }
+    
+    .divGroupStatus {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        overflow-y: scroll;
+        cursor: pointer;
+    }
+    
+    .divGroupStatus::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .divGroupStatus div.textArrow {
+        position: relative;
+        top: -100px;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .divGroupStatus div {
+        position: relative;
+    }
+    
+    .divGroupStatus div::after {
+        margin: 0px;
+    }
+    /* .divGroupStatus div:hover {
+        animation: arrowMove 0.5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: both;
+    }
+    
+    @keyframes arrowMove {
+        0% {
+            margin: 0;
+        }
+        100% {
+            margin: 50px 0;
+        }
+    } */
+    
+    .itemGroup {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: scroll;
+    }
+    
+    .currentItemGroup {
+        display: flex;
+    }
+    
+    .operation {
+        justify-content: left;
+        display: flex;
+        flex-direction: row;
+        cursor: pointer;
+    }
+    
+    .operation>* {
+        margin: 10px;
+    }
+    
+    .operation:hover {
+        background-color: white;
+        color: var(--perso-color-bleuDaher2);
+    }
+    
+    .currentOperation {
+        background-color: white;
+        color: var(--perso-color-bleuDaher2);
+        font-weight: 700;
+    }
+    
+    #operationsOverview {
+        display: flex;
+        flex-direction: column;
+        width: 35%;
+    }
+    
+    #operationDetails {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-y: scroll;
+        width: 100%;
+    }
+    
+    table {
+        background-color: rgba(255, 255, 255, 0.85);
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9rem;
+        min-width: 200px;
+        border-radius: 5px 5px 0 0;
+    }
+    
+    table thead tr {
+        background-color: var(--perso-color-bleuDaher);
+        color: #fff;
+        text-align: left;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+    
+    table thead,
+    table td {
+        padding: 6px 15px;
+        margin: 5px 0;
+    }
+    
+    table tbody tr#item:hover {
+        font-weight: bold;
+        background-color: #009879;
+    }
+    
+    table tbody tr {
+        color: var(--perso-color-bleuDaher);
+        font-weight: 600;
+    }
+    
+    table tbody .full {
+        color: var(--perso-color-green);
+        font-weight: 700;
+    }
+    
+    .groupDesc {
+        color: var(--perso-color-bleuDaher);
+        font-size: 1.5em;
+        font-weight: 700;
+        text-decoration: underline;
+        margin-bottom: 25px;
+    }
+    
+    .operations {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .op-state {
+        width: 10%;
+    }
+    
+    .round {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+    
+    .op-completed {
+        background-color: var(--perso-color-green);
+    }
+    
+    .op-not-initiated {
+        background-color: var(--perso-color-rougeDaher);
+    }
+    
+    #editeur {
+        width: 500px;
+        height: 200px;
+        border: 1px solid black;
+        padding: 5px;
+        overflow: auto;
+    }
+    
+    .recorded-traca {
+        border: 2px solid var(--perso-color-green);
+    }
+    
+    #tool {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #used-tool {
+        width: 70%;
+        display: flex;
+        flex-direction: row;
+        margin: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #used-tool>div {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    #used-tool label {
+        background-color: var(--perso-color-bleuDaher2);
+        color: white;
+    }
+    
+    #used-tool>div>div {
+        background-color: rgba(255, 255, 255, 0.85);
+        color: var(--perso-color-bleuDaher2);
+    }

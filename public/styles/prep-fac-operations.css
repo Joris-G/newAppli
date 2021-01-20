@@ -1,0 +1,72 @@
+@page {
+    size: A4;
+    margin: 1.5cm, 1cm;
+}
+
+@media print {
+    html,
+    body {
+        width: 210mm;
+        height: 297mm;
+    }
+    /* ... the rest of the rules ... */
+}
+
+body {
+    margin: 1.5cm, 1cm;
+}
+
+.hidden {
+    position: absolute;
+    left: -10000em;
+    top: auto;
+    width: 1px;
+    height: 1px;
+}
+
+#fac-operation {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid black;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+#top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#op-title {
+    font-weight: 800;
+}
+
+#op-type {}
+
+#op-details {
+    display: flex;
+    flex-direction: row;
+}
+
+#qrcode {
+    padding: 5px;
+    width: max-content;
+    height: max-content;
+}
+
+#details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#instruction-detail {
+    border-bottom: 1px solid black;
+}
+
+#opt-detail {
+    text-align: center;
+    font-size: 0.9em;
+}

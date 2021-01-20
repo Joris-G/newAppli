@@ -1,0 +1,33 @@
+@import "../styles/defaultStyle.css";
+@page {
+    size: A4;
+}
+
+@media print {
+    html,
+    .content {
+        width: 210mm;
+        height: 297mm;
+    }
+    .nav {
+        display: none;
+    }
+}
+
+
+/* nav */
+
+.nav {
+    display: none;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow: visible;
+}
+
+.divECME {
+    margin: 6px;
+}

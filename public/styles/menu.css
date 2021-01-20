@@ -1,0 +1,107 @@
+nav ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.nav {
+    display: flex;
+    flex-direction: row;
+    grid-row: 1/2;
+    grid-column: 1/2;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--perso-color-bleuDaher2);
+    color: #f0f0f0;
+    user-select: none;
+}
+
+nav li {
+    cursor: pointer;
+}
+
+.nav a {
+    display: block;
+    padding: 0 16px;
+    line-height: inherit;
+    cursor: pointer;
+}
+
+.menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    line-height: 50px;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: max-content;
+}
+
+.levelOneMenu {
+    display: inline-block;
+    white-space: nowrap;
+    position: relative;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.levelOneMenu:hover {
+    background-color: var(--perso-color-rougeDaher);
+}
+
+.levelOneMenu:hover .dropDownMenu {
+    display: block;
+}
+
+.dropDownMenu {
+    font-weight: 300;
+    text-transform: none;
+    display: none;
+    position: absolute;
+    transform: translateX(-20px);
+    width: max-content;
+    background-color: white;
+}
+
+.dropDownItem a {
+    color: var(--perso-color-bleuDaher2);
+    text-decoration: none;
+    text-align: left;
+    padding: 0 35px;
+}
+
+.dropDownItem a:hover {
+    color: var(--perso-color-rougeDaher);
+    background-color: rgb(253, 253, 220);
+    /* font-weight: bold; */
+    text-decoration: underline;
+}
+
+.instructionsBar {
+    display: flex;
+    width: 100%;
+    align-self: center;
+    justify-content: right;
+    justify-items: right;
+    padding-left: 0;
+    overflow: hidden;
+    user-select: none;
+}
+
+#div-user {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 10px;
+    width: max-content;
+    align-items: center;
+}
+
+#div-userName {
+    width: 200px;
+    display: flex;
+}
+
+#div-role {
+    width: 100px;
+}

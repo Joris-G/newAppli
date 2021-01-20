@@ -1,0 +1,120 @@
+:root {
+    --perso-btn-width: 75px;
+    --perso-btn-height: 20px;
+}
+
+.btn {
+    display: flex;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-radius {
+    border-radius: calc(var(--perso-btn-height)*2);
+}
+
+.btn-primary {
+    background-color: rgba(var(--perso-color-bleuDaher3), 0.85);
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: rgba(var(--perso-color-bleuDaher3), 0.5);
+    color: #fff;
+}
+
+.btn-S {
+    font-size: 0.8em;
+    width: calc(0.75*var(--perso-btn-width));
+    height: calc(0.8*var(--perso-btn-height));
+    padding: 20px;
+    margin: 5px;
+}
+
+.btn-M {
+    font-size: 1em;
+    width: var(--perso-btn-width);
+    height: var(--perso-btn-height);
+    padding: 20px;
+    margin: 15px;
+}
+
+.btn-L {
+    font-size: 1.2em;
+    width: auto;
+    min-width: 100px;
+    height: calc(1.2*var(--perso-btn-height));
+    padding: 20px;
+    margin: 30px;
+}
+
+.btn:hover {
+    background-color: rgba(var(--perso-color-bleuDaher3), 1);
+    font-weight: bolder;
+}
+
+.btn-compliant:hover {
+    background-color: green;
+    color: white;
+}
+
+.btn-compliant-selected {
+    background-color: green;
+    color: white;
+    border: 3px solid green;
+}
+
+.btn-not-compliant:hover {
+    background-color: white;
+    color: var(--perso-color-rougeDaher);
+}
+
+.btn-not-compliant-selected {
+    background-color: white;
+    color: var(--perso-color-rougeDaher);
+    border: 3px solid var(--perso-color-rougeDaher);
+}
+
+.button {
+    border-radius: 10px;
+    background-color: blueviolet;
+    cursor: pointer;
+}
+
+.bouton-on {
+    background: var(--perso-color-green);
+}
+
+.bouton-off {
+    background: var(--perso-color-rougeDaher);
+}
+
+.bouton {
+    width: 100px;
+    height: 50px;
+    border-radius: 50px;
+}
+
+.bouton-green {
+    background-color: green;
+}
+
+.bouton-red {
+    background-color: red;
+}
+
+.yes-button {
+    width: 100px;
+    height: 50px;
+    background-color: #5cb85c;
+    color: grey;
+    cursor: pointer;
+}
+
+.no-button {
+    width: 100px;
+    height: 50px;
+    color: red;
+    cursor: pointer;
+}

@@ -1,0 +1,11 @@
+body {
+    padding: 0;
+    margin: 1cm;
+    width: 21cm;
+    border: 1px solid black;
+}
+
+.op {
+    width: 100%;
+    border: 1px solid yellow;
+}

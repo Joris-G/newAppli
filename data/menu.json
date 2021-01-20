@@ -1,0 +1,142 @@
+[{
+        "id": 1,
+        "name": "Fichier",
+        "item": [{
+                "id": 1,
+                "name": "Moulage",
+                "secteur": "COMPOSITE",
+                "file": "op-moulage-composite.php",
+                "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 2,
+                "name": "Assemblage",
+                "secteur": "COMPOSITE",
+                "file": "op-assemblage-composite.php",
+                "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 3,
+                "name": "Registre des matières",
+                "secteur": "COMPOSITE",
+                "file": "op-registre-matiere.php",
+                "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 4,
+                "name": "Entrée matière",
+                "secteur": "COMPOSITE",
+                "file": "mag-entree-matiere.php",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 5,
+                "name": "Utilisateur",
+                "secteur": "TOUS",
+                "file": "user.html",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 6,
+                "name": "Editeur d'étiquettes",
+                "secteur": "COMPOSITE",
+                "file": "edit-label.html",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 7,
+                "name": "Création Assemblage",
+                "secteur": "COMPOSITE",
+                "file": "gest-create-assy.php",
+                "roles": ["METHODE", "GESTIONNAIRE", "ADMIN"]
+            },
+            {
+                "id": 8,
+                "name": "DECONNEXION",
+                "secteur": "COMPOSITE",
+                "file": "logout.php",
+                "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"]
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Option",
+        "item": [{
+                "id": 1,
+                "name": "Thème",
+                "secteur": "COMPOSITE",
+                "file": "moulage.php",
+                "roles": ["METHODE", "ADMIN"]
+            },
+            {
+                "id": 2,
+                "name": "Preparation Assemblage",
+                "secteur": "COMPOSITE",
+                "file": "prep-assemblage-composite.php",
+                "roles": ["METHODE", "ADMIN"]
+            },
+            {
+                "id": 3,
+                "name": "Utilisateur",
+                "secteur": "TOUS",
+                "file": "user.html",
+                "roles": ["METHODE", "ADMIN"]
+            },
+            {
+                "id": 4,
+                "name": "Editeur d'étiquettes",
+                "secteur": "COMPOSITE",
+                "file": "edit-label.html",
+                "roles": ["METHODE", "ADMIN"]
+            },
+            {
+                "id": 5,
+                "name": "ECME",
+                "secteur": "COMPOSITE",
+                "file": "ECME.php",
+                "roles": ["METHODE", "ADMIN"]
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "Vues d'ensemble",
+        "item": [{
+                "id": 1,
+                "name": "GULFSTREAM ELEVATOR",
+                "secteur": "COMPOSITE",
+                "file": "plant-assembly-elevator.php",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 2,
+                "name": "A350 MLGD",
+                "secteur": "COMPOSITE",
+                "file": "prep-assemblage-composite.php",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 3,
+                "name": "GULFSTREAM WINGLET",
+                "secteur": "TOUS",
+                "file": "user.html",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 4,
+                "name": "GULFSTREAM MLGD",
+                "secteur": "COMPOSITE",
+                "file": "edit-label.html",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            },
+            {
+                "id": 5,
+                "name": "H160",
+                "secteur": "COMPOSITE",
+                "file": "ECME.php",
+                "roles": ["METHODE", "CHEF", "ADMIN"]
+            }
+        ]
+    }
+]
