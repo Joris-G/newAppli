@@ -12,6 +12,8 @@ body {
     margin: 0px;
     padding: 0px;
     font-family: 'Raleway';
+    color: var(--perso-color-bleuDaher);
+    font-weight: bold;
 }
 
 .content {
@@ -23,26 +25,42 @@ body {
     border: solid 2px;
     border-color: var(--perso-color-rougeDaher);
     width: fit-content;
-    margin: 10px;
-    padding: 50px;
     height: fit-content;
 }
 
 .title {
     text-align: center;
     font-size: 2em;
+    margin-top: 20px;
 }
 
 .authentifications {
     display: flex;
     flex-direction: row;
+    margin: 25px;
 }
 
 .authentifications>div {
-    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 250px;
 }
 
 .login-mdp {
     display: flex;
     flex-direction: column;
+    padding: 20px;
+}
+
+.login-qrcode {
+    border-right: 2px solid var(--perso-color-bleuDaher);
+}
+
+.login-qrcode img {
+    width: 100px;
+}
+
+.login-qrcode img:hover {
+    width: 120px;
 }

@@ -1,0 +1,9 @@
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+.input-group * {
+    margin: 2px 8px;
+}
