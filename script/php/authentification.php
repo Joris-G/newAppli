@@ -17,9 +17,12 @@ if (count($_GET)<2) {
 $username = $result['NOM'] . ' ' . $result['PRENOM'];
 $matricule = $result['MATRICULE'];
 $role = $result['ROLE'];
+$teamNumber = $result['EQUIPE'];
+
 $_SESSION['matricule'] = $matricule;
 $_SESSION['role'] = $role;
 $_SESSION['username'] = $username;
+$_SESSION['teamNumber'] = $teamNumber;
 
 echo json_encode($result);
 //var_dump($_SESSION);

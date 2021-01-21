@@ -83,9 +83,13 @@ class MenuView {
         const divRole = document.createElement('div');
         divRole.id = 'div-role';
         const role = document.getElementById('role').innerHTML;
-        divRole.innerHTML = role;
+        divRole.innerHTML = `Rôle : ${role}`;
+        const divTeam = document.createElement('div');
+        divTeam.id = 'div-team';
+        const teamNumber = document.getElementById('teamNumber').innerHTML;
+        divTeam.innerHTML = `Equipe : ${teamNumber}`;
 
-        divUser.append(divUserName, divRole);
+        divUser.append(divUserName, divRole, divTeam);
         menuBar.appendChild(divUser);
 
         const divTime = document.createElement('div');
