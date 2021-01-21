@@ -16,18 +16,26 @@ session_start();
         <div class="title">AUTHENTIFICATION</div>
         <div class="authentifications">
             <div class="login-qrcode">
-                <img src="" alt="SCAN QR CODE">
+                <img src="src/img/qr-code.png" alt="SCAN QR CODE" id='img-scan'>
             </div>
-            <div class="login-mdp">
-                <label for="login">Nom d'utilisateur</label>
-                <input type="text" name="login" id="login">
-                <label for="mdp">Mot de passe</label>
-                <input type="text" name="mdp" id="mdp">
-                <div class="btn btn-M">CONNEXION</div>
+            <form action="" method="get">
+                <div class="login-mdp">
+                    <div class="input-group">
+                        <label for="login">Nom d'utilisateur</label>
+                        <input type="text" name="login" id="login">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="mdp">Mot de passe</label>
+                        <input type="password" name="mdp" id="mdp">
+                    </div>
+                    
+                    <div class="btn btn-M btn-primary btn-radius" id='btn-login'>CONNEXION</div>
+                </form>
             </div>
         </div>
     </div>
-    <script src="../script/login.js"></script>
+    <script type="module" src="../script/login.js"></script>
 
 </body>
 
