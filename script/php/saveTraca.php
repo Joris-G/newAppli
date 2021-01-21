@@ -1,7 +1,7 @@
 <?php
 require 'Connexion.php';
 $con = new Connexion();
-
+var_dump($_GET['matricule']);
 //On créé une ligne de traca sanction Non-conforme par défaut
 $sql = "INSERT INTO t_traca (`ID FAC`, `OF`, `USER`,`STATUT`) VALUES (:idFac,:of,:user,:statut)";
 $query = $con->createQuery($sql, ['idFac' => $_GET['idFac'], 'of' => $_GET['of'], 'user' => $_GET['matricule'], 'statut'=> 1]);

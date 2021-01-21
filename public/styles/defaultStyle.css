@@ -1,6 +1,7 @@
 @import "./menu.css";
 @import "./perso-button.css";
 @import "./perso-forms.css";
+@import "./perso-table.css";
 @font-face {
     font-family: 'Goldman';
     src: url('../src/font/Goldman-Regular.ttf');

@@ -22,6 +22,10 @@ class Model {
         return doAjaxThings(`../script/php/getALlUsers.php`, 'json');
     }
 
+    getTeamUsers(teamNumber) {
+        return doAjaxThings(`../script/php/getTeamUsers.php?teamNumber=${teamNumber}`, 'json');
+    }
+
     getAllTools() {
         return doAjaxThings(`../script/php/getToolList.php?secteur=3`, 'json');
     }
@@ -126,17 +130,6 @@ class Model {
 
     saveTracaOf(_workOrder, _idFAC, _currentTraca, _userMatricule) {
         return doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text');
-        // if (boxName != undefined) {
-        //     doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${this.workOrder}&listOf=${JSON.stringify(allTraca.allScanOF)}&idFac=${allTraca.tracaDatas[0]['ID TRACA']}&boxName=${boxName.value}&matricule=${matricule}`, 'text')
-        //         .then((msg) => {
-
-        //         });
-        // } else {
-        //     doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${this.workOrder}&listOf=${JSON.stringify(allTraca.allScanOF)}&idFac=${allTraca.tracaDatas[0]['ID TRACA']}&matricule=${matricule}`, 'text')
-        //         .then((msg) => {
-
-        //         });
-        // }
     }
     saveTracaMatiere(_workOrder, _idFAC, _currentTraca, _userMatricule) {
         return doAjaxThings(`../script/php/saveTraca.php?typeTraca=MATIERE&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text')
@@ -208,7 +201,9 @@ class ViewContent {
         return groupArrow;
     }
 
-    createOperation(_operation) {
+    createOperation(_operation, _userList) {
+        let userArray = [];
+        userArray.push(this.getElement('#matricule').innerHTML);
         const promGetAllECME = doAjaxThings(`../script/php/getECMEToolList.php?secteur=3`, 'json');
         console.log(_operation);
         const operation = this.createElement('div', 'operation');
@@ -324,7 +319,7 @@ class ViewContent {
 
                 //BOUTON CONFIRMER ACTION
                 const confirmOfAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray);
                 };
                 btnConfirm.setAction(confirmOfAction);
                 break;
@@ -402,7 +397,7 @@ class ViewContent {
                 }
                 //BOUTON CONFIRMER ACTION
                 const confirmToolAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML, sanctionChoice.sanction);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray, sanctionChoice.sanction);
                 };
                 btnConfirm.setAction(confirmToolAction);
                 break;
@@ -468,7 +463,7 @@ class ViewContent {
                 });
                 //BOUTON CONFIRMER ACTION
                 const confirmMatAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray);
                 };
                 btnConfirm.setAction(confirmMatAction);
                 break;
@@ -478,7 +473,41 @@ class ViewContent {
         //TABLE
         table.append(tableHeader, tableBody);
         operationDetails.appendChild(table);
-        operation.append(operationTopBar, operationInstruction, operationDetails);
+
+        //Table user
+        const divUserTable = this.createElement('div', 'userTable');
+        const userTable = this.createElement('table', 'perso-table');
+        //header
+        const userTableHeader = this.createElement('thead', 'perso-table-thead');
+        const userTableTrHeader = this.createElement('tr', '');
+        const tdHeaderUserName = this.createElement('td', 'perso-table-thead-td');
+        tdHeaderUserName.innerText = `Utilisateurs`;
+        userTableTrHeader.appendChild(tdHeaderUserName);
+        userTableHeader.appendChild(userTableTrHeader);
+        //body
+        const userTableBody = this.createElement('tbody', 'perso-table-tbody');
+        _userList.forEach(user => {
+            const userTableTr = this.createElement('tr', 'perso-table-tbody-tr');
+            userTableTr.id = user.MATRICULE;
+            userTableTr.onclick = () => {
+                if (userTableTr.classList.contains('perso-table-selected-row')) {
+                    console.log(userArray);
+                    userArray.splice(userArray.indexOf(user.MATRICULE), 1);
+                } else {
+                    userArray.push(user.MATRICULE);
+                }
+                userTableTr.classList.toggle('perso-table-selected-row');
+                console.log(userArray);
+
+            }
+            const userTableTd = this.createElement('td', 'perso-table-tbody-td');
+            userTableTd.innerText = `${user.PRENOM} ${user.NOM}`;
+            userTableTr.appendChild(userTableTd);
+            userTableBody.appendChild(userTableTr);
+        });
+        userTable.append(userTableHeader, userTableBody);
+        divUserTable.appendChild(userTable);
+        operation.append(operationTopBar, operationInstruction, operationDetails, divUserTable);
         operation.appendChild(btnConfirm.drawButton());
         return operation;
     }
@@ -642,11 +671,12 @@ class ViewContent {
         //this.exitCurrentOperation()
     }
 
-    displayOperation(operation) {
+    displayOperation(operation, userList) {
+        console.log(userList);
         this.exitCurrentOperation()
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
-        divOperation.appendChild(this.createOperation(operation));
+        divOperation.appendChild(this.createOperation(operation, userList));
     }
 
     // this.getElement(`#operation-${_idOpe}`).style.display = 'flex';
@@ -1007,22 +1037,28 @@ class Controller {
         });
         Promise.allSettled([promStatus, promRole]).then(values => {
             console.log(values);
-            if (this.operation.nomTracaDetail[0].ROLE == 1) {
-                if (values[1].status == "fulfilled") this.view.displayOperation(this.operation);
-            } else {
-                if (values[0].status == "fulfilled") {
-                    this.view.displayOperation(this.operation);
-                } else {
-                    const role = this.view.getElement('#role').innerHTML;
-                    if (role == "CONTROLE") {
-                        this.view.displayOperation(this.operation);
+            const teamNumber = this.view.getElement('#teamNumber').innerHTML;
+            this.model.getTeamUsers(teamNumber).then((userList) => {
+                    this.userList = userList
+                    if (this.operation.nomTracaDetail[0].ROLE == 1) {
+                        if (values[1].status == "fulfilled") this.view.displayOperation(this.operation, this.userList);
                     } else {
-                        this.qualityUserNeed('role');
+                        if (values[0].status == "fulfilled") {
+                            this.view.displayOperation(this.operation, this.userList);
+                        } else {
+                            const role = this.view.getElement('#role').innerHTML;
+                            if (role == "CONTROLE") {
+                                this.view.displayOperation(this.operation, this.userList);
+                            } else {
+                                this.qualityUserNeed('role');
+                            }
+                        }
                     }
+                },
+                (error) => {
+                    console.error(error);
                 }
-            }
-
-
+            );
         });
 
 
@@ -1089,7 +1125,8 @@ class Controller {
                 if (response.ROLE == 'CONTROLE') {
                     msgModal.removeBox();
                     this.alternateUser = response;
-                    this.view.displayOperation(this.operation);
+                    console.log(this.userList);
+                    this.view.displayOperation(this.operation, this.userList);
                     return true;
                 } else {
                     return false;
@@ -1115,13 +1152,13 @@ class Controller {
     }
 
 
-    confirmTracaAction(_operation, _workOrder, _userMatricule, sanction = null) {
+    confirmTracaAction(_operation, _workOrder, _usersMatricule, sanction = null) {
         const btnExitAssy = this.view.getElement('.divCommand');
         switch (_operation.TYPE_TRACA) {
             case 'OF':
                 const boxName = document.getElementById('input-box-name');
                 const listOf = this.getTraca();
-                this.model.saveTracaOf(_workOrder, _operation.ID, listOf, _userMatricule).then(() => {
+                this.model.saveTracaOf(_workOrder, _operation.ID, listOf, _usersMatricule).then(() => {
                     this.afterSaveData();
                 });
                 break;
@@ -1137,7 +1174,7 @@ class Controller {
                         listTool[index].of = newToolOf.ID;
                     });
                     console.log(listTool);
-                    this.model.saveTracaControle(_workOrder, _operation.ID, listTool, _userMatricule, sanction).then(() => {
+                    this.model.saveTracaControle(_workOrder, _operation.ID, listTool, _usersMatricule, sanction).then(() => {
                         this.afterSaveData();
                     });
                 });
@@ -1146,7 +1183,7 @@ class Controller {
                 break;
             case 'Matiere':
                 const listMatiere = this.getTraca();
-                this.model.saveTracaMatiere(_workOrder, _operation.ID, listMatiere, _userMatricule).then(() => {
+                this.model.saveTracaMatiere(_workOrder, _operation.ID, listMatiere, _usersMatricule).then(() => {
                     this.afterSaveData();
                 });
                 break;
