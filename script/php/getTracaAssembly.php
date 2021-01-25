@@ -66,6 +66,11 @@ foreach ($nomTracaGroup as $key_1 => $group) {
             if (gettype($keyTraca) != 'boolean') {
                 $nbTraca = $nbTraca + 1;
                 $nomTracaItem['traca'] = $traca[array_search($nomTracaItem['ID'], array_column($traca, 'ID FAC'))];
+                
+                $sql = "SELECT * FROM t_traca_users WHERE `ID_TRACA` = :idTraca";
+                $queryUsers = $con->createQuery($sql, ['idTraca' => $traca[$keyTraca]['ID']]);
+                $nomTracaItem['traca']['USERS'] = $queryUsers->fetchAll();
+
                 switch ($nomTracaItem['TYPE_TRACA']) {
                     case 'OF':
                         $sql = "SELECT * FROM t_traca_of WHERE `ID TRACA` = :idTraca";
@@ -84,6 +89,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
                         break;
                 }
                 $nomTracaItem['traca']['tracaDetails'] = $queryTraca->fetchAll();
+                
                 $keyTraca = 'Undefined';
             }
             array_push($itemOfGroup, $nomTracaItem);

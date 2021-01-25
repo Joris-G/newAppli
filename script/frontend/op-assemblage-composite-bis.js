@@ -1197,13 +1197,12 @@ class Controller {
 
     }
     afterSaveData() {
-        const currentGroup = this.process.find(group => group.ID === this.operation.GROUPE);
-        const indexCurrentOp = currentGroup.items.indexOf(currentGroup.items.find(op => op.ID === this.operation.ID));
-        const nextOperation = currentGroup.items[indexCurrentOp + 1];
         this.assyWorkorderAction(this.article, this.OF).then(() => {
-
+            const currentGroup = this.process.find(group => group.ID === this.operation.GROUPE);
+            const indexCurrentOp = currentGroup.items.indexOf(currentGroup.items.find(op => op.ID === this.operation.ID));
+            const nextOperation = currentGroup.items[indexCurrentOp + 1];
             this.view.getElement(`#group-${currentGroup.ID}`).click();
-            this.view.displayOperation(nextOperation);
+            this.view.displayOperation(nextOperation, this.userList);
 
         });
     }
@@ -1307,10 +1306,15 @@ class Controller {
                                 operatorName.classList.add('opName');
                                 const operatorMatricule = document.createElement('div');
                                 operatorMatricule.classList.add('opMat');
-                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                operatorMatricule.innerText = 'Matricules : ';
+                                operatorName.innerText = 'NOM : '
                                 promGetAllUsers.then(users => {
-                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
-                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
                                 });
                                 operator.append(operatorName, operatorMatricule);
                                 const sanction = document.createElement('div');
@@ -1388,10 +1392,15 @@ class Controller {
                                 operatorName.classList.add('opName');
                                 const operatorMatricule = document.createElement('div');
                                 operatorMatricule.classList.add('opMat');
-                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                operatorMatricule.innerText = 'Matricules : ';
+                                operatorName.innerText = 'NOM : '
                                 promGetAllUsers.then(users => {
-                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
-                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
                                 });
                                 operator.append(operatorName, operatorMatricule);
                                 const sanction = document.createElement('div');
@@ -1472,10 +1481,16 @@ class Controller {
                                 operatorName.classList.add('opName');
                                 const operatorMatricule = document.createElement('div');
                                 operatorMatricule.classList.add('opMat');
-                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                console.log(step.traca.USERS);
+                                operatorMatricule.innerText = 'Matricules : '
+                                operatorName.innerText = 'NOM : '
                                 promGetAllUsers.then(users => {
-                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
-                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
                                 });
                                 operator.append(operatorName, operatorMatricule);
                                 const sanction = document.createElement('div');
