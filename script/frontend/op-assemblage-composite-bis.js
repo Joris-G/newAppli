@@ -22,6 +22,9 @@ class Model {
         return doAjaxThings(`../script/php/getALlUsers.php`, 'json');
     }
 
+    getMatList() {
+        return doAjaxThings(`../script/php/getMaterialsList.php?secteur=ASSEMBLAGE COMPOSITE`, 'json');
+    }
     getTeamUsers(teamNumber) {
         return doAjaxThings(`../script/php/getTeamUsers.php?teamNumber=${teamNumber}`, 'json');
     }
@@ -1208,11 +1211,17 @@ class Controller {
     generateFac() {
         const promGetAllUsers = this.model.getAllUsers();
         const promGetAllTools = this.model.getAllTools();
+        const promGetMatList = this.model.getMatList();
         const facWindow = window.open('../public/Templates/fac.html')
         facWindow.onload = () => {
             //HEADER
+            const divAssemblyDesignation = facWindow.document.querySelector('.designation');
+            const divAssemblyReference = facWindow.document.querySelector('.reference');
+            const divAssemblyWorkorder = facWindow.document.querySelector('.of');
 
-
+            divAssemblyReference.innerText = this.view.getElement('.part-article').innerText;
+            divAssemblyDesignation.innerText = this.view.getElement('.part-designation').innerText;
+            divAssemblyWorkorder.innerText = this.view.getElement('.part-workorder').innerText;
             //CONTENT
             const divContent = facWindow.document.querySelector('.content');
             console.log(this.process);
@@ -1242,8 +1251,6 @@ class Controller {
 
                     switch (step.TYPE_TRACA) {
                         case 'Controle':
-                            console.log(step);
-                            console.log(step.nomTracaDetail);
                             if (step.nomTracaDetail[0].OUTILLAGE != 26) {
                                 const tableTools = document.createElement('table');
                                 //TABLE TOOL HEADER
@@ -1266,11 +1273,20 @@ class Controller {
                                         tdDetailDes.innerText = tool.TYPE;
                                     });
                                     const tdDetailSN = document.createElement('td');
-                                    if (step.traca) {
-                                        //step.traca.tracaDetails.find();
-                                        trDetail.append(tdDetailDes, tdDetailSN);
-                                        tbBody.appendChild(trDetail);
+                                    if (step.traca !== undefined) {
+                                        if (step.traca.tracaDetails.length > 0) {
+                                            const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_NOM_CONTROLE == tracaDetail.ID);
+                                            if (recordedTraca) {
+                                                const promGetAllECME = doAjaxThings(`../script/php/getECMEToolList.php?secteur=3`, 'json');
+                                                promGetAllECME.then((ecmeList) => {
+                                                    const ECME = ecmeList.find(ecme => ecme.ID == recordedTraca.OUTIL);
+                                                    tdDetailSN.innerHTML = ECME.REFERENCE;
+                                                });
+                                            }
+                                        }
                                     }
+                                    trDetail.append(tdDetailDes, tdDetailSN);
+                                    tbBody.appendChild(trDetail);
                                 });
                                 //TABLE TOOLS FOOTER
                                 const tbFooter = document.createElement('tfoot');
@@ -1337,11 +1353,21 @@ class Controller {
                             step.nomTracaDetail.forEach(tracaDetail => {
                                 const trMatDetail = document.createElement('tr');
                                 const tdMatDetailDes = document.createElement('td');
-                                promGetAllTools.then(tools => {
-                                    const tool = tools.find(tool => tool.ID == tracaDetail.OUTILLAGE);
-                                    tdMatDetailDes.innerText = tool.TYPE;
+                                promGetMatList.then(matList => {
+                                    console.log(matList);
+                                    const mat = matList.find(mat => mat.ID == tracaDetail.ARTICLE);
+                                    console.log(mat);
+                                    tdMatDetailDes.innerText = mat['DESIGNATION SIMPLIFIEE'];
                                 });
                                 const tdMatDetailSN = document.createElement('td');
+                                if (step.traca !== undefined) {
+                                    if (step.traca.tracaDetails.length > 0) {
+                                        const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_NOM_MATIERE == tracaDetail.ID);
+                                        if (recordedTraca) {
+                                            tdMatDetailSN.innerHTML = recordedTraca['ID MAT ENTRY'];
+                                        }
+                                    }
+                                }
                                 trMatDetail.append(tdMatDetailDes, tdMatDetailSN);
                                 tbMatBody.appendChild(trMatDetail);
                             });
@@ -1393,35 +1419,85 @@ class Controller {
 
 
                         case 'OF':
-                            // const tableParts = document.createElement('table');
-                            // //TABLE TOOL HEADER
-                            // const tbHeader = document.createElement('thead');
-                            // const trHeader = document.createElement('tr');
-                            // const tdPN = document.createElement('td');
-                            // tdPN.innerText = 'P/N';
-                            // const tdQty = document.createElement('td');
-                            // tdQty.innerText = 'Quantité';
-                            // const tdDes = document.createElement('td');
-                            // tdDes.innerText = 'Description';
-                            // const tdSN = document.createElement('td');
-                            // tdSN.innerText = 'S/N'
+                            const tableParts = document.createElement('table');
+                            //TABLE TOOL HEADER
+                            const tbOfHeader = document.createElement('thead');
+                            const trOfHeader = document.createElement('tr');
+                            const tdOfPN = document.createElement('td');
+                            tdOfPN.innerText = 'P/N';
+                            const tdOfQty = document.createElement('td');
+                            tdOfQty.innerText = 'Quantité';
+                            const tdOfDes = document.createElement('td');
+                            tdOfDes.innerText = 'Description';
+                            const tdOfSN = document.createElement('td');
+                            tdOfSN.innerText = 'S/N'
 
-                            // trHeader.append(tdPN, tdQty, tdDes, tdSN);
-                            // tbHeader.appendChild(trHeader);
-                            // //TABLE TOOLS BODY
-                            // const tbBody = document.createElement('tbody');
-                            // step.nomTracaDetail.forEach(tracaDetail => {
-                            //     const trDetail = document.createElement('tr');
-                            //     const tdDetailPN = document.createElement('td');
-                            //     const tdDetailQty = document.createElement('td');
-                            //     const tdDetailDes = document.createElement('td');
-                            //     const tdDetailSN = document.createElement('td');
-                            // });
-                            // //TABLE TOOLS FOOTER
-                            // const tbFooter = document.createElement('tfoot');
+                            trOfHeader.append(tdOfPN, tdOfQty, tdOfDes, tdOfSN);
+                            tbOfHeader.appendChild(trOfHeader);
+                            //TABLE TOOLS BODY
+                            const tbOfBody = document.createElement('tbody');
+                            step.nomTracaDetail.forEach(tracaDetail => {
+                                console.log(tracaDetail);
+                                const trOfDetail = document.createElement('tr');
+                                const tdOfDetailPN = document.createElement('td');
+                                tdOfDetailPN.innerText = tracaDetail.ARTICLE;
+                                const tdOfDetailQty = document.createElement('td');
+                                tdOfDetailQty.innerText = tracaDetail.QUANTITE;
+                                const tdOfDetailDes = document.createElement('td');
+                                tdOfDetailDes.innerText = tracaDetail.DESIGNATION;
+                                const tdOfDetailSN = document.createElement('td');
+                                if (step.traca !== undefined) {
+                                    if (step.traca.tracaDetails.length > 0) {
+                                        const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_TRACA_OF == tracaDetail.ID);
+                                        if (recordedTraca) {
+                                            tdOfDetailSN.innerHTML = recordedTraca.OF;
+                                        }
+                                    }
+                                }
+                                trOfDetail.append(tdOfDetailPN, tdOfDetailQty, tdOfDetailDes, tdOfDetailSN);
+                                tbOfBody.appendChild(trOfDetail);
+                            });
+                            //TABLE TOOLS FOOTER
+                            const tbFooter = document.createElement('tfoot');
 
-                            // //TABLE APPEND ELEMENT
-                            // tableTools.append(tbHeader, tbBody, tbFooter);
+                            //TABLE APPEND ELEMENT
+                            tableParts.append(tbOfHeader, tbOfBody, tbFooter);
+                            stepThirdRow.appendChild(tableParts);
+
+                            //STEP FINAL
+                            if (step.traca) {
+                                const operator = document.createElement('div');
+                                operator.classList.add('operator');
+                                const operatorName = document.createElement('div');
+                                operatorName.classList.add('opName');
+                                const operatorMatricule = document.createElement('div');
+                                operatorMatricule.classList.add('opMat');
+                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                promGetAllUsers.then(users => {
+                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
+                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                });
+                                operator.append(operatorName, operatorMatricule);
+                                const sanction = document.createElement('div');
+                                sanction.classList.add('sanction');
+                                const sanctionDate = document.createElement('div');
+                                sanctionDate.classList.add('sanctionDate');
+                                sanctionDate.innerText = 'Date : ' + step.traca['DATE DE CREATION'];
+                                const sanctionValue = document.createElement('div');
+                                sanctionValue.classList.add('sanctionValue');
+                                if (step.traca.SANCTION == 1) {
+                                    sanctionValue.innerText = 'CONFORME';
+                                } else {
+                                    sanctionValue.innerText = 'NON-CONFORME';
+                                }
+                                sanction.append(sanctionDate, sanctionValue);
+
+                                stepForthRow.append(operator, sanction);
+                            } else {
+                                const divNA = document.createElement('div');
+                                divNA.innerText = "Opération non réalisée";
+                                stepForthRow.append(divNA);
+                            }
                             break;
                         default:
                             break;
