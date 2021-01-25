@@ -131,14 +131,14 @@ class Model {
     }
 
 
-    saveTracaOf(_workOrder, _idFAC, _currentTraca, _userMatricule) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text');
+    saveTracaOf(_workOrder, _idFAC, _currentTraca, _usersMatricules) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}`, 'text');
     }
-    saveTracaMatiere(_workOrder, _idFAC, _currentTraca, _userMatricule) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=MATIERE&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text')
+    saveTracaMatiere(_workOrder, _idFAC, _currentTraca, _usersMatricules) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=MATIERE&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}`, 'text')
     }
-    saveTracaControle(_workOrder, _idFAC, _currentTraca, _userMatricule, _sanction = null) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=Controle&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}&sanction=${_sanction}`, 'text');
+    saveTracaControle(_workOrder, _idFAC, _currentTraca, _usersMatricules, _sanction = null) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=Controle&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}&sanction=${_sanction}`, 'text');
     }
 
     getGroupStatus(_groupId) {

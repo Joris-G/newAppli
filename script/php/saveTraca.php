@@ -1,15 +1,28 @@
 <?php
 require 'Connexion.php';
 $con = new Connexion();
-var_dump($_GET['matricule']);
 //On créé une ligne de traca sanction Non-conforme par défaut
 $sql = "INSERT INTO t_traca (`ID FAC`, `OF`, `USER`,`STATUT`) VALUES (:idFac,:of,:user,:statut)";
-$query = $con->createQuery($sql, ['idFac' => $_GET['idFac'], 'of' => $_GET['of'], 'user' => $_GET['matricule'], 'statut'=> 1]);
+$query = $con->createQuery($sql, ['idFac' => $_GET['idFac'], 'of' => $_GET['of'], 'user' => $_GET['matricules'], 'statut' => 1]);
 
-$sql = "SELECT `ID` FROM t_traca WHERE `ID FAC` = :idFac AND `OF`=:of AND STATUT <>0" ;
+$sql = "SELECT `ID` FROM t_traca WHERE `ID FAC` = :idFac AND `OF`=:of AND STATUT <>0";
 $query = $con->createQuery($sql, ['idFac' => $_GET['idFac'], 'of' => $_GET['of']]);
 $idTraca = $query->fetch();
+
 $idTraca = intval($idTraca['ID']);
+
+$matricules = explode(",",$_GET['matricules']);
+
+//USERS
+var_dump($idTraca);
+foreach ($matricules as $key => $matricule) {
+    var_dump($matricule);
+    $sql = "INSERT INTO t_traca_users (`ID_TRACA`,`MATRICULE`) VALUES (:idTraca,:matricule)";
+    $query = $con->createQuery($sql, ['idTraca' => $idTraca, 'matricule'=>$matricule]);
+}
+
+
+//TRACA
 switch ($_GET['typeTraca']) {
     case 'MATIERE':
         $listOfPart = json_decode($_GET['listOf'], true);
