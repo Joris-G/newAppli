@@ -100,7 +100,7 @@
 .operation {
     height: 100%;
     display: grid;
-    grid-template-areas: "title title" "instructions instructions" "sanction utilisateur" "tableau utilisateur" ". confirm";
+    grid-template-areas: "title title" "instructions instructions" "img img" "sanction utilisateur" "tableau utilisateur" ". confirm";
     padding: 10px;
 }
 
@@ -342,4 +342,12 @@ table tbody .full {
     font-size: 2em;
     font-weight: bold;
     text-align: center;
+}
+
+.operation-img {
+    grid-area: img;
+}
+
+.operation-img img {
+    height: 300px;
 }

@@ -230,6 +230,14 @@ class ViewContent {
         const operationInstruction = this.createElement('div', 'operation-instruction');
         operationInstruction.innerHTML = _operation.INSTRUCTIONS;
         const operationDetails = this.createElement('div', 'operation_details');
+        const divImage = this.createElement('div', 'operation-img');
+        if (_operation.IMAGE != "") {
+            const opImgName = _operation.IMAGE;
+            const opImg = this.createElement('img', '');
+            opImg.src = `../public/src/img/FAC/${opImgName}`;
+            divImage.appendChild(opImg);
+        }
+
         const btnConfirm = new Bouton('confirm');
         const table = document.createElement('table');
         const tableHeader = document.createElement('thead');
@@ -510,7 +518,7 @@ class ViewContent {
         });
         userTable.append(userTableHeader, userTableBody);
         divUserTable.appendChild(userTable);
-        operation.append(operationTopBar, operationInstruction, operationDetails, divUserTable);
+        operation.append(operationTopBar, operationInstruction, divImage, operationDetails, divUserTable);
         operation.appendChild(btnConfirm.drawButton());
         return operation;
     }

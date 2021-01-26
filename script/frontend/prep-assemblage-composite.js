@@ -793,7 +793,7 @@ class Traca {
         //tracaTable.appendChild(divHeader);
         const trHeader = document.createElement('tr');
         tableHeader.appendChild(trHeader);
-        const arrayHeader = ['ID DE TRACA', 'TYPE DE TRACA', 'INSTRUCTIONS', 'QR CODE', 'EDITER', 'SUPPRIMER', 'EDITER FAC']
+        const arrayHeader = ['ID DE TRACA', 'TYPE DE TRACA', 'INSTRUCTIONS', 'QR CODE', 'EDITER', 'SUPPRIMER', 'EDITER FAC', 'IMAGE']
         arrayHeader.forEach(headerItem => {
                 const tdHeader = document.createElement('td');
                 trHeader.appendChild(tdHeader);
@@ -815,6 +815,7 @@ class Traca {
                         });
                     }
                 };
+                //EDITER FAC
                 if (headerItem === arrayHeader[6]) {
                     tdHeader.classList.add('pointer', 'underligne-red')
                     tdHeader.onclick = () => {
@@ -852,7 +853,7 @@ class Traca {
             trGroup.appendChild(tdGroupName);
             const tdGroup = document.createElement('td');
             tdGroup.innerText = group.DESCRIPTION;
-            tdGroup.colSpan = 5;
+            tdGroup.colSpan = 6;
             trGroup.appendChild(tdGroup);
             const tracaItems = group['items'];
             tracaItems.forEach(item => {
@@ -957,8 +958,29 @@ class Traca {
                     }
                 }
                 tdEditFac.appendChild(btnEditFac);
+                const tdAddPictures = document.createElement('td');
+                const lblAddPicture = document.createElement('label');
+                lblAddPicture.for = 'img-input';
+                lblAddPicture.innerText = '';
+                const imgAddPicture = document.createElement('img');
+                imgAddPicture.src = "../public/src/img/upload.png";
+                imgAddPicture.classList.add('tbl-img');
+                const inputImgFile = document.createElement('input');
+                inputImgFile.type = "file";
+                inputImgFile.id = 'img-input';
+                inputImgFile.style.display = 'none';
+                inputImgFile.oninput = () => {
+                    const endpoint = "../script/php/uploadPrepAssImg.php";
+                    const formData = new FormData();
+                    formData.append("inputFile", inputImgFile.files[0]);
+                    formData.append('idOp', item.ID);
 
-                trItem.append(tdEdit, tdDelete, tdEditFac);
+                    fetch(endpoint, { method: "post", body: formData }).catch(console.error)
+                }
+                lblAddPicture.append(imgAddPicture, inputImgFile);
+
+                tdAddPictures.append(lblAddPicture);
+                trItem.append(tdEdit, tdDelete, tdEditFac, tdAddPictures);
                 trItem.onmouseover = () => {
                     const elementToShow = document.getElementsByClassName(`${item['ID']}`);
                     Array.from(elementToShow).forEach(elem => {
