@@ -98,7 +98,8 @@
 /* OPERATEUR OPERATION */
 
 .operation {
-    height: 100%;
+    height: 95%;
+    width: 100%;
     display: grid;
     grid-template-areas: "title title" "instructions instructions" "img img" "sanction utilisateur" "tableau utilisateur" ". confirm";
     padding: 10px;
@@ -109,6 +110,7 @@
 }
 
 .operation #confirm-button {
+    height: 5%;
     grid-area: confirm;
 }
 
@@ -121,18 +123,23 @@
 }
 
 .operation-top-bar {
+    height: 25%;
     grid-area: title;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    /* width: 100%; */
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 10px;
 }
 
 .sanction-choice {
     grid-area: sanction;
+}
+
+.operation_details {
+    overflow-y: scroll;
 }
 
 .operation_details table {
@@ -164,7 +171,7 @@ table {
     background-color: rgba(255, 255, 255, 0.85);
     border-collapse: collapse;
     margin: 25px 0;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     min-width: 200px;
     border-radius: 5px 5px 0 0;
 }
@@ -275,6 +282,7 @@ table tbody .full {
 }
 
 .operation-instruction {
+    height: 25%;
     grid-area: instructions;
     font-size: 2em;
 }
@@ -350,4 +358,8 @@ table tbody .full {
 
 .operation-img img {
     height: 300px;
+}
+
+.OperationTitle {
+    height: 5%;
 }

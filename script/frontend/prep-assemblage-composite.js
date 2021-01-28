@@ -233,7 +233,7 @@ const generateOption = function(type) {
                     ['COMPAGNON', 3],
                     ['CONTROLE', 1]
                 ]);
-                divRole.id = 'role';
+                divRole.id = 'select-role';
                 divRole.onchange = () => {
                     testMinimumFilled();
                 }
@@ -582,12 +582,10 @@ btnNewItem.onclick = () => {
                     break;
                 case 'Controle':
                     TracaItem.prototype.tool = null;
-                    console.log(document.getElementById('tool'));
                     newItem.tool = document.getElementById('tool').value;
                     TracaItem.prototype.role = null;
-                    newItem.role = document.getElementById('role').value;
+                    newItem.role = document.getElementById('select-role').value;
                     newItem.instruction = inputInstructions.value;
-
                     promUpdateItems
                         .then(doAjaxThings(`../script/php/addNewTraca.php?article=${newItem.article}&typeTraca=${newItem.type}&tool=${newItem.tool}&instructions=${newItem.instruction}&idFAC=${newItem.ordre}&group=${newItem.group}&role=${newItem.role}`, 'text')
                             .then(() => {

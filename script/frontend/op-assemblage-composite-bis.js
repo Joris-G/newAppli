@@ -215,7 +215,7 @@ class ViewContent {
         const btnScan = new Bouton('scan');
         btnScan.setEnable();
         const divGroupTitle = this.createElement('div', 'groupe-title');
-        const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').innerHTML);
+        const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').getAttribute('value'));
         assemblyStatus.then(process => {
             const currentGroup = process.find(group => group.ID == _operation.GROUPE);
             divGroupTitle.innerHTML = currentGroup.DESCRIPTION;
@@ -236,6 +236,7 @@ class ViewContent {
             const opImg = this.createElement('img', '');
             opImg.src = `../public/src/img/FAC/${opImgName}`;
             divImage.appendChild(opImg);
+            operation.appendChild(divImage);
         }
 
         const btnConfirm = new Bouton('confirm');
@@ -255,6 +256,7 @@ class ViewContent {
         const role = this.getElement('#role').innerHTML;
         switch (_operation.TYPE_TRACA) {
             case 'OF':
+                divImgType.src = "../public/src/img/build.svg";
                 //operation.appendChild(btnScan.drawButton());
                 operationDetails.innerHTML = "";
                 //HEADER
@@ -518,7 +520,7 @@ class ViewContent {
         });
         userTable.append(userTableHeader, userTableBody);
         divUserTable.appendChild(userTable);
-        operation.append(operationTopBar, operationInstruction, divImage, operationDetails, divUserTable);
+        operation.append(operationTopBar, operationInstruction, operationDetails, divUserTable);
         operation.appendChild(btnConfirm.drawButton());
         return operation;
     }
@@ -586,7 +588,7 @@ class ViewContent {
             modalBox.noButton.onclick = () => {
                 modalBox.removeBox();
                 this.getElement('.operation').remove();
-                this.controller.assyWorkorderAction(this.getElement('.part-article').innerText, this.getElement('.part-workorder').innerText);
+                this.controller.assyWorkorderAction(this.getElement('.part-article').getAttribute('value'), this.getElement('.part-workorder').getAttribute('value'));
             }
 
 
@@ -625,6 +627,7 @@ class ViewContent {
             divImgType.id = `op-${operation.ID}`;
             switch (operation.TYPE_TRACA) {
                 case 'OF':
+                    console.log('coucou');
                     divImgType.src = "../public/src/img/build.svg";
                     break;
                 case 'Matiere':
@@ -695,9 +698,12 @@ class ViewContent {
     displayPartDescription(_part, _workOrder) {
         const designation = _part.desSimplifee;
         const article = _part.numArticleSap;
-        this.getElement('.part-article').innerHTML = article;
-        this.getElement('.part-designation').innerHTML = designation;
-        this.getElement('.part-workorder').innerHTML = _workOrder
+        this.getElement('.part-article').innerText = `Article : ${article}`;
+        this.getElement('.part-article').setAttribute('value', article);
+        this.getElement('.part-designation').innerText = `Désignation : ${designation}`;
+        this.getElement('.part-designation').setAttribute('value', designation);
+        this.getElement('.part-workorder').innerText = `OF : ${_workOrder}`;
+        this.getElement('.part-workorder').setAttribute('value', _workOrder);
     }
 
     exitCurrentOperation() {
@@ -1226,9 +1232,9 @@ class Controller {
             const divAssemblyReference = facWindow.document.querySelector('.reference');
             const divAssemblyWorkorder = facWindow.document.querySelector('.of');
 
-            divAssemblyReference.innerText = this.view.getElement('.part-article').innerText;
-            divAssemblyDesignation.innerText = this.view.getElement('.part-designation').innerText;
-            divAssemblyWorkorder.innerText = this.view.getElement('.part-workorder').innerText;
+            divAssemblyReference.innerText = this.view.getElement('.part-article').getAttribute('value');
+            divAssemblyDesignation.innerText = this.view.getElement('.part-designation').getAttribute('value');
+            divAssemblyWorkorder.innerText = this.view.getElement('.part-workorder').getAttribute('value');
             //CONTENT
             const divContent = facWindow.document.querySelector('.content');
             console.log(this.process);

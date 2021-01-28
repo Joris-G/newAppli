@@ -58,6 +58,7 @@
 }
 
 body {
+    font-variant-numeric: ordinal;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: max-content 100%;

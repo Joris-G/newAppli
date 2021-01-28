@@ -33,7 +33,7 @@
                 "id": 5,
                 "name": "Utilisateur",
                 "secteur": "TOUS",
-                "file": "user.html",
+                "file": "OPERATEURS.php",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },
             {
