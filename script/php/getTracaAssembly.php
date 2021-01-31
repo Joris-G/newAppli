@@ -54,7 +54,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
                     $nomTracaItem['nomTracaDetail'] = $queryNom->fetchAll();
                     foreach ($nomTracaItem['nomTracaDetail'] as $key => $Mat) {
                         $sql = "SELECT `DESIGNATION SIMPLIFIEE` FROM t_materials WHERE `ID` = :idMat";
-                        $queryDes = $con->createQuery($sql, ['idMat' => $Mat['ARTICLE']]);
+                        $queryDes = $con->createQuery($sql, ['idMat' => $Mat['ID ARTICLE']]);
                         $nomTracaItem['nomTracaDetail'][$key]['DESIGNATION'] = $queryDes->fetchColumn();
                     }
                     break;

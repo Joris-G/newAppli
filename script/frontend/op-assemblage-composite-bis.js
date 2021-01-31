@@ -105,6 +105,7 @@ class Model {
     getAssemblyStatus(_articleSap, _workOrder) {
         return new Promise((resolve, reject) => {
             const promProcess = this.getProcess(_articleSap);
+            console.log(_workOrder, _articleSap);
             const promProgress = this.getProgress(_workOrder, _articleSap);
             const data = Promise.all([promProcess, promProgress]);
             data.then(result => {
@@ -188,20 +189,49 @@ class ViewContent {
         return element;
     }
 
+    createLabeledElement(className, strLabel, value) {
+        const divLabeledItem = this.createElement('div', 'labeled-item');
+        //divContainer.classList.add('labeled-item');
+        const divLabel = this.createElement('div', 'label');
+        divLabel.innerText = strLabel;
+        const divValue = this.createElement('div', className);
+        divValue.innerText = value;
+        divValue.setAttribute('value', value);
+        divLabeledItem.append(divLabel, divValue);
+        return divLabeledItem;
+    }
+
     /**
      *
      *
-     * @param {String} textArrow
+     * @param {String} text
      * @param {Number} progress
      * @return {HTMLDivElement} 
      * @memberof ViewContent
      */
-    createGroupElement(textArrow, progress) {
-        const groupArrow = this.createElement('div', 'group-arrow');
+    createGroupElement(text, progress) {
+        const group = this.createElement('div', 'group');
+        const divTopGroup = this.createElement('div', 'topGroup');
+        const titleGroup = this.createElement('div', 'titleGroup');
+        titleGroup.innerText = text;
         const divProgress = this.createElement('div', 'progressRate');
-        divProgress.innerHTML = `avancement : ${(progress*100).toFixed(0)} %`;
-        groupArrow.append(textArrow, divProgress);
-        return groupArrow;
+        divProgress.innerHTML = `${(progress*100).toFixed(0)}%`;
+        if (progress == 0) {
+            divProgress.style.backgroundColor = 'rgb(230, 69, 93)';
+        } else if (progress <= 0.25) {
+            divProgress.style.backgroundColor = 'rgb(240, 127, 80)';
+        } else if (progress <= 0.50) {
+            divProgress.style.backgroundColor = 'rgb(250, 193, 64)';
+        } else if (progress <= 0.75) {
+            divProgress.style.backgroundColor = 'rgb(212, 227, 81)';
+        } else if (progress <= 0.99) {
+            divProgress.style.backgroundColor = 'rgb(140, 241, 120)';
+        } else if (progress == 1) {
+            divProgress.style.backgroundColor = 'rgb(65, 255, 161)';
+        }
+        divTopGroup.append(titleGroup, divProgress);
+        group.append(divTopGroup);
+        return group;
     }
 
     createOperation(_operation, _userList) {
@@ -212,8 +242,6 @@ class ViewContent {
         const operation = this.createElement('div', 'operation');
         operation.id = `operation-${_operation.ID}`;
         const operationTopBar = this.createElement('div', 'operation-top-bar');
-        const btnScan = new Bouton('scan');
-        btnScan.setEnable();
         const divGroupTitle = this.createElement('div', 'groupe-title');
         const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').getAttribute('value'));
         assemblyStatus.then(process => {
@@ -226,10 +254,9 @@ class ViewContent {
         operationTypeText.innerText = _operation.TYPE_TRACA;
         const divImgType = this.createElement('img', 'operation-type-img');
         operationType.append(divImgType, operationTypeText);
-        operationTopBar.append(divGroupTitle, operationType);
+        operationTopBar.append(operationType, divGroupTitle);
         const operationInstruction = this.createElement('div', 'operation-instruction');
         operationInstruction.innerHTML = _operation.INSTRUCTIONS;
-        const operationDetails = this.createElement('div', 'operation_details');
         const divImage = this.createElement('div', 'operation-img');
         if (_operation.IMAGE != "") {
             const opImgName = _operation.IMAGE;
@@ -238,9 +265,14 @@ class ViewContent {
             divImage.appendChild(opImg);
             operation.appendChild(divImage);
         }
-
+        const divConfBtn = this.createElement('div', 'divBtnConf');
         const btnConfirm = new Bouton('confirm');
+        divConfBtn.appendChild(btnConfirm.drawButton());
+
+        const divTable = this.createElement('div', 'tableaux');
         const table = document.createElement('table');
+        divTable.appendChild(table);
+        table.classList.add('perso-table-noBorder');
         const tableHeader = document.createElement('thead');
         const tableBody = document.createElement('tbody');
         const trHeader = document.createElement('tr');
@@ -257,8 +289,6 @@ class ViewContent {
         switch (_operation.TYPE_TRACA) {
             case 'OF':
                 divImgType.src = "../public/src/img/build.svg";
-                //operation.appendChild(btnScan.drawButton());
-                operationDetails.innerHTML = "";
                 //HEADER
                 const tdArticle = document.createElement('td');
                 const tdHeaderPartDesignation = document.createElement('td');
@@ -338,7 +368,6 @@ class ViewContent {
                 break;
             case 'Controle':
                 divImgType.src = "../public/src/img/shield.svg";
-                operationDetails.innerHTML = "";
                 //HEADER
                 const tdHeaderToolDesignation = document.createElement('td');
                 const tdScanTool = document.createElement('td');
@@ -388,17 +417,14 @@ class ViewContent {
                         table.classList.add('hidden');
                         tdTool.innerHTML = "N/A";
                         trToolToRecord.classList.add('full');
-                    } else {
-                        //operation.appendChild(btnScan.drawButton());
                     }
-
                     tdTool.classList.add('traca');
                     trToolToRecord.append(tdToolDesignation, tdTool);
                     if (role == "CONTROLE") trToolToRecord.appendChild(tdDeleteCell);
                     tableBody.appendChild(trToolToRecord);
                 });
                 const sanctionChoice = new SanctionBouton();
-                operationDetails.appendChild(sanctionChoice.drawButton());
+                operation.appendChild(sanctionChoice.drawButton());
                 //Remplissage
                 if (_operation.traca) {
                     const sanction = _operation.traca.SANCTION;
@@ -417,8 +443,6 @@ class ViewContent {
             case 'Matiere':
 
                 divImgType.src = "../public/src/img/flask.svg";
-                //operation.appendChild(btnScan.drawButton());
-                operationDetails.innerHTML = "";
                 //HEADER
                 const tdHeaderMaterialDesignation = document.createElement('td');
                 const tdScanMat = document.createElement('td');
@@ -485,7 +509,7 @@ class ViewContent {
         }
         //TABLE
         table.append(tableHeader, tableBody);
-        operationDetails.appendChild(table);
+        operation.appendChild(divTable);
 
         //Table user
         const divUserTable = this.createElement('div', 'userTable');
@@ -520,8 +544,8 @@ class ViewContent {
         });
         userTable.append(userTableHeader, userTableBody);
         divUserTable.appendChild(userTable);
-        operation.append(operationTopBar, operationInstruction, operationDetails, divUserTable);
-        operation.appendChild(btnConfirm.drawButton());
+        operation.append(operationTopBar, operationInstruction, divUserTable);
+        operation.appendChild(divConfBtn);
         return operation;
     }
 
@@ -555,9 +579,53 @@ class ViewContent {
         this.appendElement('.module', scanInput.drawInput());
     }
     addScanButton() {
-        const btnScan = new Bouton('scan', null, null, 'S');
-        const content = this.getElement('.rightSideBar');
-        content.appendChild(btnScan.drawButton());
+        const divBtnScan = this.createElement('div', 'btn-scan');
+        divBtnScan.classList.add('bouton-green');
+        const imgBtnScan = this.createElement('img', 'imgBtnScan');
+        imgBtnScan.src = "../public/src/img/qr-code.svg";
+        const labelBtnScan = this.createElement('span', 'label-btnScan');
+        labelBtnScan.innerText = 'SCAN';
+        divBtnScan.append(imgBtnScan, labelBtnScan);
+        const rightOptButtonPan = this.getElement('.rightOptButtonPan');
+        rightOptButtonPan.appendChild(divBtnScan);
+
+        document.addEventListener('click', (ev) => {
+            console.log(ev.target);
+            if (ev.target != imgBtnScan && ev.target != labelBtnScan) {
+                if (divBtnScan.classList.contains('bouton-green')) {
+                    divBtnScan.classList.add('bouton-red');
+                    divBtnScan.classList.remove('bouton-green');
+                    document.querySelector('.scan-input').blur();
+                    console.log('test1');
+                }
+            }
+        });
+        divBtnScan.onclick = () => {
+            if (divBtnScan.classList.contains('bouton-red')) {
+                divBtnScan.classList.add('bouton-green');
+                divBtnScan.classList.remove('bouton-red');
+                document.querySelector('.scan-input').focus();
+                console.log('test2');
+            } else {
+                divBtnScan.classList.remove('bouton-green');
+                divBtnScan.classList.add('bouton-red');
+                document.querySelector('.scan-input').blur();
+                console.log('test3');
+            }
+        }
+    }
+
+    addControlPanelButton() {
+        const divControlPanelButton = this.createElement('div', 'control-panel-button');
+        const imgCtrlPanBtn = this.createElement('img', 'ctrl-pan-img');
+        imgCtrlPanBtn.src = '../public/src/img/arrow-point-to-right.svg';
+        divControlPanelButton.appendChild(imgCtrlPanBtn);
+        const leftOptButtonPan = this.getElement('.leftOptButtonPan');
+        leftOptButtonPan.appendChild(divControlPanelButton);
+
+        divControlPanelButton.addEventListener('click', () => {
+            this.hideAssemblyPanel();
+        });
     }
 
     addFacButton() {
@@ -565,20 +633,26 @@ class ViewContent {
         if (getBtnFac) {
             return getBtnFac;
         } else {
-            const btnFac = new Bouton('default', 'FAC', null, 'S');
-            const content = this.getElement('.rightSideBar');
-            const drawBtn = btnFac.drawButton();
-            drawBtn.classList.add('facButton', 'btn-primary');
-            content.appendChild(drawBtn);
-            return drawBtn;
+            const divBtnFac = this.createElement('div', 'facButton');
+            const imgFac = this.createElement('img', 'imgFac');
+            imgFac.src = "../public/src/img/contract.svg"
+            const labelFac = this.createElement('span', 'labelFac');
+            labelFac.innerText = "FAC";
+            divBtnFac.append(imgFac, labelFac);
+            const rightOptButtonPan = this.getElement('.rightOptButtonPan');
+            rightOptButtonPan.appendChild(divBtnFac);
+            return divBtnFac;
         }
+    }
+
+    hideAssemblyPanel() {
+        this.getElement('.leftSideBar').classList.toggle('hidenLeftPanel');
+        this.getElement('.section-operations').classList.toggle('grow-section-operations');
     }
 
     displayGroup(_group, _arrow) {
         // BOUTON QUITTER ASSY
         const btnExitAssy = this.getElement('.divCommand');
-        btnExitAssy.innerText = "QUITTER L'ASSEMBLAGE"
-        btnExitAssy.classList.add('btn', 'btn-L', 'btn-primary');
         btnExitAssy.onclick = () => {
             const modalBox = new ModalBox('YES_NO', `êtes-vous sûr de vouloir quitter cet assemblage ?`);
             modalBox.yesButton.onclick = () => {
@@ -627,7 +701,6 @@ class ViewContent {
             divImgType.id = `op-${operation.ID}`;
             switch (operation.TYPE_TRACA) {
                 case 'OF':
-                    console.log('coucou');
                     divImgType.src = "../public/src/img/build.svg";
                     break;
                 case 'Matiere':
@@ -691,6 +764,7 @@ class ViewContent {
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
         divOperation.appendChild(this.createOperation(operation, userList));
+        this.hideAssemblyPanel();
     }
 
     // this.getElement(`#operation-${_idOpe}`).style.display = 'flex';
@@ -698,12 +772,31 @@ class ViewContent {
     displayPartDescription(_part, _workOrder) {
         const designation = _part.desSimplifee;
         const article = _part.numArticleSap;
-        this.getElement('.part-article').innerText = `Article : ${article}`;
-        this.getElement('.part-article').setAttribute('value', article);
-        this.getElement('.part-designation').innerText = `Désignation : ${designation}`;
-        this.getElement('.part-designation').setAttribute('value', designation);
-        this.getElement('.part-workorder').innerText = `OF : ${_workOrder}`;
-        this.getElement('.part-workorder').setAttribute('value', _workOrder);
+        console.log(_workOrder);
+        if (this.getElement('.part-workorder') != null && this.getElement('.part-workorder').innerText == _workOrder) {
+            console.log('coucou1');
+            this.getElement('.part-workorder').innerText = _workOrder;
+            this.getElement('.part-article').innerText = article;
+            this.getElement('.part-designation').innerText = designation;
+        } else {
+            if (this.getElement('.part-workorder')) {
+                console.log(this.getElement('.part-workorder').getAttribute('value'));
+            }
+
+            const divPartDescription = this.getElement('.partDescription');
+            const title = this.createElement('div', 'module-title');
+            const divPartDes = this.createElement('div', 'part-description');
+            divPartDes.classList.add('labeled-container');
+
+            const divPartArticle = this.createLabeledElement('part-article', 'Article : ', article);
+            const divPartDesignation = this.createLabeledElement('part-designation', 'Désignation : ', designation);
+            const divWorkorder = this.createLabeledElement('part-workorder', 'OF : ', _workOrder);
+
+            const divBoxName = this.createElement('div', 'box-name');
+            const divProgress = this.createElement('div', 'assembly-progress');
+            divPartDes.append(divPartArticle, divPartDesignation, divWorkorder, divBoxName);
+            divPartDescription.append(divPartDes, title, divProgress);
+        }
     }
 
     exitCurrentOperation() {
@@ -712,25 +805,6 @@ class ViewContent {
 
     appendElement(selector, element) {
         this.getElement(selector).appendChild(element);
-    }
-
-    /**
-     *
-     *
-     * @param {string} _title
-     * @memberof ViewContent
-     */
-    addTitle() {
-        const divPartDescription = this.getElement('.partDescription');
-        const title = this.createElement('div', 'module-title');
-        const divPartDes = this.createElement('div', 'part-description');
-        const divPartArticle = this.createElement('div', 'part-article');
-        const divPartDesignation = this.createElement('div', 'part-designation');
-        const divWorkorder = this.createElement('div', 'part-workorder');
-        const divBoxName = this.createElement('div', 'box-name');
-        const divProgress = this.createElement('div', 'assembly-progress');
-        divPartDes.append(divPartArticle, divPartDesignation, divWorkorder, divBoxName, );
-        divPartDescription.append(divPartDes, title, divProgress);
     }
 }
 class Controller {
@@ -742,9 +816,13 @@ class Controller {
     }
     initPage() {
         this.view.addScanInput();
-        this.view.addTitle();
         this.view.getElement('.scan-input').focus();
         this.view.addScanButton();
+        this.view.addControlPanelButton();
+        const btnExitAssy = this.view.getElement('.divCommand');
+        const imgExit = this.view.createElement('img', 'img-quit');
+        imgExit.src = "../public/src/img/curve-arrow.png";
+        btnExitAssy.appendChild(imgExit);
     }
 
     getProcess(_article) {
@@ -759,7 +837,7 @@ class Controller {
      */
     ofAction(_inputOf) {
         //SI on est sur une page début assy
-        if (this.view.getElement('.part-workorder').innerHTML != "") {
+        if (this.view.getElement('.part-workorder') != undefined && this.view.getElement('.part-workorder') != null) {
             this.addOfAction(_inputOf);
         } else {
             this.assyWorkorderAction(_inputOf[0], _inputOf[1]);
