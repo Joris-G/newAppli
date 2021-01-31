@@ -5,12 +5,15 @@
 
 @media print {
     html,
-    .content {
+    body {
         width: 210mm;
         height: 297mm;
     }
     .nav {
         display: none;
+    }
+    .divECME {
+        page-break-inside: avoid;
     }
 }
 
@@ -21,13 +24,29 @@
     display: none;
 }
 
-.content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+body {
+    width: 210mm;
+    height: 297mm;
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    grid-template-rows: 130px;
     overflow: visible;
+    justify-content: space-around;
 }
 
 .divECME {
-    margin: 6px;
+    text-align: center;
+    margin: 8px;
+    padding: 0;
+    page-break-inside: avoid;
+}
+
+.divECME img {
+    padding: 6px;
+}
+
+.txt-human {
+    font-size: 0.6em;
+    display: flex;
+    flex-direction: column;
 }

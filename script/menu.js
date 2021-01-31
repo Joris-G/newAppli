@@ -39,10 +39,19 @@ class MenuView {
      *
      */
     displayMenu(menu) {
-        //Data of the menu
         const menuBar = document.createElement("nav");
         this.getElement('body').appendChild(menuBar);
         menuBar.classList.add("nav");
+
+        //LOGO
+        const divLogo = document.createElement('div');
+        divLogo.classList.add('logoDaher');
+        const imgLogo = document.createElement('img');
+        imgLogo.src = '../public/src/img/logoDaherFondBleu.png';
+        divLogo.appendChild(imgLogo);
+        menuBar.appendChild(divLogo);
+
+        //Data of the menu
         const ul = document.createElement('ul')
         ul.classList.add('menu')
         Object.keys(menu).forEach(levelOneMenu => {
@@ -74,6 +83,7 @@ class MenuView {
 
         menuBar.appendChild(this.builInstructionBar());
 
+        //USER
         const divUser = document.createElement('div');
         divUser.id = 'div-user';
         const divUserName = document.createElement('div');
@@ -88,10 +98,13 @@ class MenuView {
         divTeam.id = 'div-team';
         const teamNumber = document.getElementById('teamNumber').innerHTML;
         divTeam.innerHTML = `Equipe : ${teamNumber}`;
-
-        divUser.append(divUserName, divRole, divTeam);
+        const divAttributs = document.createElement('div');
+        divAttributs.classList.add('user-attributes');
+        divAttributs.append(divRole, divTeam)
+        divUser.append(divUserName, divAttributs);
         menuBar.appendChild(divUser);
 
+        //TIME
         const divTime = document.createElement('div');
         let time = this.syncTime();
         divTime.innerHTML = `${time.hour}:${time.minute}`;

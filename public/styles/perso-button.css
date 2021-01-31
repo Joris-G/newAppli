@@ -1,6 +1,6 @@
 :root {
-    --perso-btn-width: 75px;
-    --perso-btn-height: 20px;
+    --perso-btn-width: 17vw;
+    --perso-btn-height: 0.5vw;
 }
 
 .btn {
@@ -8,10 +8,12 @@
     font-weight: bold;
     align-items: center;
     justify-content: center;
+    letter-spacing: 0.3vw;
 }
 
 .btn-radius {
-    border-radius: calc(var(--perso-btn-height)*2);
+    border-radius: calc(var(--perso-btn-height)*4);
+    /* border-radius: 50%; */
 }
 
 .btn-primary {
@@ -25,7 +27,7 @@
 }
 
 .btn-S {
-    font-size: 0.8em;
+    font-size: 0.6em;
     width: calc(0.75*var(--perso-btn-width));
     height: calc(0.8*var(--perso-btn-height));
     padding: 20px;
@@ -33,11 +35,11 @@
 }
 
 .btn-M {
-    font-size: 1em;
+    font-size: 0.8em;
     width: var(--perso-btn-width);
     height: var(--perso-btn-height);
-    padding: 20px;
-    margin: 15px;
+    padding: 1.5vw;
+    margin: 5px;
 }
 
 .btn-L {
@@ -96,13 +98,14 @@
     border-radius: 50px;
 }
 
-.bouton-green {
+
+/* .bouton-green {
     background-color: green;
 }
 
 .bouton-red {
     background-color: red;
-}
+} */
 
 .yes-button {
     width: 100px;

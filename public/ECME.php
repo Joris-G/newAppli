@@ -21,7 +21,6 @@ if (empty($_SESSION['username'])) {
         <div class='user' id="role"><?php echo $_SESSION['role'] ?></div>
         <div class='user' id="matricule"><?php echo $_SESSION['matricule'] ?></div>
     </div>
-    <div class="content"></div>
 </body>
 <script src="../script/qrcode.js"></script>
 <script type="module" src="../script/menu.js"></script>

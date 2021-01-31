@@ -80,10 +80,10 @@ export class SanctionBouton {
         divButtons.classList.add('sanction-choice');
         this.btnConform = document.createElement('div');
         this.btnConform.innerHTML = 'CONFORME';
-        this.btnConform.classList.add('btn', 'btn-compliant', 'btn-primary', 'btn-L');
+        this.btnConform.classList.add('btn', 'btn-compliant', 'btn-primary', 'btn-M', 'btn-radius');
         this.btnNonConform = document.createElement('div');
         this.btnNonConform.innerHTML = 'NON-CONFORME';
-        this.btnNonConform.classList.add('btn', 'btn-primary', 'btn-L', 'btn-not-compliant');
+        this.btnNonConform.classList.add('btn', 'btn-primary', 'btn-M', 'btn-not-compliant', 'btn-radius');
         divButtons.append(this.btnConform, this.btnNonConform);
 
         this.btnConform.onclick = () => {
@@ -162,7 +162,7 @@ export class Bouton {
     drawButton() {
         switch (this.style) {
             case 'confirm':
-                this.btn.classList.add('btn', 'bouton-disable', 'btn-primary');
+                this.btn.classList.add('btn', 'bouton-disable', 'btn-primary', 'btn-radius');
                 this.btn.innerText = 'CONFIRMER';
                 this.btn.id = 'confirm-button';
                 break;
