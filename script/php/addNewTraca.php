@@ -35,4 +35,3 @@ switch ($_GET['typeTraca']) {
         var_dump('try again');
         break;
 }
-    # code...

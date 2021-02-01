@@ -19,6 +19,9 @@ foreach ($matricules as $key => $matricule) {
     var_dump($matricule);
     $sql = "INSERT INTO t_traca_users (`ID_TRACA`,`MATRICULE`) VALUES (:idTraca,:matricule)";
     $query = $con->createQuery($sql, ['idTraca' => $idTraca, 'matricule'=>$matricule]);
+    $sql = "UPDATE t_user SET `SCORE TRACA` = (`SCORE TRACA` + 1) WHERE MATRICULE = :matricule";
+    $query = $con->createQuery($sql, ['matricule'=> $matricule]);
+    var_dump($query);
 }
 
 
@@ -87,4 +90,8 @@ switch ($_GET['typeTraca']) {
         # code...
         break;
 }
-    # code...
+
+//SCORE DE L'UTILISATEUR CONNECTE
+$sql = "UPDATE t_user SET `SCORE APPLI` = (`SCORE APPLI` + 1) WHERE MATRICULE =:matricule";
+$query = $con->createQuery($sql, ['matricule'=> $matricules[0]]);
+var_dump($query);
