@@ -321,34 +321,32 @@ export class Input {
         this.input.classList.remove('active-input');
     }
     setAction(action = null) {
-        console.log(this.style);
-
         switch (this.style) {
             case 'scan':
                 this.input.onchange = () => {
-                    console.log(this.input.value);
+                    console.log(`Scan inout :  ---   ${this.input.value}   ---`);
                     switch (this.scanProcessing().TYPE) {
                         case 'IDFAC':
                             this.controller.idFacAction(this.input.value);
                             break;
                         case 'OF':
-                            console.log('OF action');
+                            //console.log('OF action');
                             this.controller.ofAction(this.scanProcessing().DATA);
                             break;
                         case 'CTRL-TOOL':
-                            console.log('Control tool action');
+                            //console.log('Control tool action');
                             this.controller.ctrlToolAction(this.scanProcessing().DATA);
                             break;
                         case 'MAT':
-                            console.log('Material scan action');
+                            //console.log('Material scan action');
                             this.controller.materialAction(this.scanProcessing().DATA);
                             break;
                         case 'USER':
-                            console.log('User scan action');
+                            //console.log('User scan action');
                             document.querySelector('.divSecondaryUser').innerHTML = this.scanProcessing().DATA;
                             break;
                         default:
-                            console.log('default');
+                            //console.log('default');
                             this.controller.idFacAction(this.input.value);
                             break;
                     }
@@ -559,7 +557,7 @@ export class DownArrowStatus {
 export async function doAjaxThings(url, responseType) {
     // await code here
     let result = await makeRequest("GET", url, responseType)
-    console.log(result);
+        //console.log(result);
     return result;
     // code below here will only execute when await makeRequest() finished loading
 

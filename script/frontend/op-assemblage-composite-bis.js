@@ -105,7 +105,7 @@ class Model {
     getAssemblyStatus(_articleSap, _workOrder) {
         return new Promise((resolve, reject) => {
             const promProcess = this.getProcess(_articleSap);
-            console.log(_workOrder, _articleSap);
+            //console.log(_workOrder, _articleSap);
             const promProgress = this.getProgress(_workOrder, _articleSap);
             const data = Promise.all([promProcess, promProgress]);
             data.then(result => {
@@ -238,7 +238,7 @@ class ViewContent {
         let userArray = [];
         userArray.push(this.getElement('#matricule').innerHTML);
         const promGetAllECME = doAjaxThings(`../script/php/getECMEToolList.php?secteur=3`, 'json');
-        console.log(_operation);
+        console.log(`Opération :`, _operation);
         const operation = this.createElement('div', 'operation');
         operation.id = `operation-${_operation.ID}`;
         const operationTopBar = this.createElement('div', 'operation-top-bar');
@@ -279,12 +279,7 @@ class ViewContent {
 
         const tdDelete = document.createElement('td');
         tdDelete.innerHTML = "SUPPRIMER";
-        const tdDeleteCell = document.createElement('td');
-        const btnDelete = document.createElement('img');
-        btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
-        tdDeleteCell.classList.add('delete-cell');
-        btnDelete.classList.add('tbl-img');
-        tdDeleteCell.appendChild(btnDelete);
+
         const role = this.getElement('#role').innerHTML;
         switch (_operation.TYPE_TRACA) {
             case 'OF':
@@ -309,6 +304,12 @@ class ViewContent {
                     const tdPartDesignation = document.createElement('td');
                     const tdPartQuatity = document.createElement('td');
                     const tdWorkOrder = document.createElement('td');
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onclick = () => {
                         ///////////////////////////
                         //ajouter un êtes vous sur !!!
@@ -382,6 +383,12 @@ class ViewContent {
                     const trToolToRecord = document.createElement('tr');
                     const tdToolDesignation = document.createElement('td');
                     const tdTool = document.createElement('td');
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onclick = () => {
                         ///////////////////////////
                         //ajouter un êtes vous sur !!!
@@ -460,7 +467,12 @@ class ViewContent {
                     tdMatDesignation.innerHTML = element.DESIGNATION;
                     tdMat.id = element.ID;
                     tdMat.classList.add('traca');
-
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onmouseover = () => {
                         btnDelete.src = "../public/src/img/poub_daher_rouge-03.png";
                         trMatToRecord.classList.add('delete');
@@ -528,14 +540,11 @@ class ViewContent {
             userTableTr.id = user.MATRICULE;
             userTableTr.onclick = () => {
                 if (userTableTr.classList.contains('perso-table-selected-row')) {
-                    console.log(userArray);
                     userArray.splice(userArray.indexOf(user.MATRICULE), 1);
                 } else {
                     userArray.push(user.MATRICULE);
                 }
                 userTableTr.classList.toggle('perso-table-selected-row');
-                console.log(userArray);
-
             }
             const userTableTd = this.createElement('td', 'perso-table-tbody-td');
             userTableTd.innerText = `${user.PRENOM} ${user.NOM}`;
@@ -573,11 +582,11 @@ class ViewContent {
         return elements;
     }
 
-
     addScanInput() {
         const scanInput = new Input('scan', this.controller);
         this.appendElement('.module', scanInput.drawInput());
     }
+
     addScanButton() {
         const divBtnScan = this.createElement('div', 'btn-scan');
         divBtnScan.classList.add('bouton-green');
@@ -588,15 +597,12 @@ class ViewContent {
         divBtnScan.append(imgBtnScan, labelBtnScan);
         const rightOptButtonPan = this.getElement('.rightOptButtonPan');
         rightOptButtonPan.appendChild(divBtnScan);
-
         document.addEventListener('click', (ev) => {
-            console.log(ev.target);
             if (ev.target != imgBtnScan && ev.target != labelBtnScan) {
                 if (divBtnScan.classList.contains('bouton-green')) {
                     divBtnScan.classList.add('bouton-red');
                     divBtnScan.classList.remove('bouton-green');
                     document.querySelector('.scan-input').blur();
-                    console.log('test1');
                 }
             }
         });
@@ -605,12 +611,10 @@ class ViewContent {
                 divBtnScan.classList.add('bouton-green');
                 divBtnScan.classList.remove('bouton-red');
                 document.querySelector('.scan-input').focus();
-                console.log('test2');
             } else {
                 divBtnScan.classList.remove('bouton-green');
                 divBtnScan.classList.add('bouton-red');
                 document.querySelector('.scan-input').blur();
-                console.log('test3');
             }
         }
     }
@@ -622,7 +626,6 @@ class ViewContent {
         divControlPanelButton.appendChild(imgCtrlPanBtn);
         const leftOptButtonPan = this.getElement('.leftOptButtonPan');
         leftOptButtonPan.appendChild(divControlPanelButton);
-
         divControlPanelButton.addEventListener('click', () => {
             this.hideAssemblyPanel();
         });
@@ -654,21 +657,18 @@ class ViewContent {
         // BOUTON QUITTER ASSY
         const btnExitAssy = this.getElement('.divCommand');
         btnExitAssy.onclick = () => {
-            const modalBox = new ModalBox('YES_NO', `êtes-vous sûr de vouloir quitter cet assemblage ?`);
-            modalBox.yesButton.onclick = () => {
-                modalBox.removeBox();
-                document.location.reload();
+                const modalBox = new ModalBox('YES_NO', `êtes-vous sûr de vouloir quitter cet assemblage ?`);
+                modalBox.yesButton.onclick = () => {
+                    modalBox.removeBox();
+                    document.location.reload();
+                }
+                modalBox.noButton.onclick = () => {
+                    modalBox.removeBox();
+                    this.getElement('.operation').remove();
+                    this.controller.assyWorkorderAction(this.getElement('.part-article').getAttribute('value'), this.getElement('.part-workorder').getAttribute('value'));
+                }
             }
-            modalBox.noButton.onclick = () => {
-                modalBox.removeBox();
-                this.getElement('.operation').remove();
-                this.controller.assyWorkorderAction(this.getElement('.part-article').getAttribute('value'), this.getElement('.part-workorder').getAttribute('value'));
-            }
-
-
-        }
-
-        //ADD ARROWS TO LEFTSIDEBAR
+            //ADD ARROWS TO LEFTSIDEBAR
         const oldGroup = this.getElement(`#group-${_group.ID}`)
         if (oldGroup) {
             oldGroup.remove();
@@ -759,7 +759,6 @@ class ViewContent {
     }
 
     displayOperation(operation, userList) {
-        console.log(userList);
         this.exitCurrentOperation()
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
@@ -772,7 +771,6 @@ class ViewContent {
     displayPartDescription(_part, _workOrder) {
         const designation = _part.desSimplifee;
         const article = _part.numArticleSap;
-        console.log(_workOrder);
         if (this.getElement('.part-workorder') != null && this.getElement('.part-workorder').innerText == _workOrder) {
             console.log('coucou1');
             this.getElement('.part-workorder').innerText = _workOrder;
@@ -1113,10 +1111,10 @@ class Controller {
             // TEST ROLE
             const role = this.view.getElement('#role').innerHTML;
             if (role != 'CONTROLE') {
-                console.log('roleReject');
+                //console.log('roleReject');
                 reject('role');
             } else {
-                console.log('promRole OK');
+                //console.log('promRole OK');
                 resolve(true);
             }
         });
@@ -1124,14 +1122,14 @@ class Controller {
         const promStatus = new Promise((resolve, reject) => {
             //TEST STATUT DE L'OPERATION
             if (this.operation.STATUS != 1) {
-                console.log('promStatus OK');
+                //console.log('promStatus OK');
                 resolve(true);
             } else {
                 reject('status');
             }
         });
         Promise.allSettled([promStatus, promRole]).then(values => {
-            console.log(values);
+            //console.log(values);
             const teamNumber = this.view.getElement('#teamNumber').innerHTML;
             this.model.getTeamUsers(teamNumber).then((userList) => {
                     this.userList = userList
@@ -1155,42 +1153,7 @@ class Controller {
                 }
             );
         });
-
-
-
-        // promStatus.then(() => {
-        //     console.log('Status OK');
-        //     this.view.displayOperation(this.operation);
-        // }, () => {
-        //     promRole.then(() => {
-        //         this.view.displayOperation(this.operation);
-        //     }, () => {
-        //         console.log('role No OK');
-        //         this.qualityUserNeed('role');
-        //     });
-        // });
-
-        // Promise.allSettled([promStatus, promRole]).then(values => {
-        //     //OUVERTURE DE L 'OP
-        //     console.log(values);
-        //     this.view.displayOperation(this.operation);
-        // }, reject => {
-        //     console.log(reject);
-        //     if (reject[0] == )
-        // }).catch(type => {
-        //     console.log(type);
-        //     promRole.then(value => {
-        //         console.log(value);
-        //         if (value != true) {
-        //             this.qualityUserNeed(type);
-        //         } else {
-        //             this.view.displayOperation(this.operation);
-        //         }
-        //     })
-        // });
-
     }
-
 
     //ACTION SI ROLE PAS BON
     qualityUserNeed(_type) {

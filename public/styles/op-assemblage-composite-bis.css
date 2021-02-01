@@ -116,7 +116,7 @@
 
 .userTable {
     grid-area: utilisateur;
-    justify-self: right;
+    justify-self: center;
 }
 
 .operation>* {
@@ -189,7 +189,7 @@
 table {
     background-color: rgba(255, 255, 255, 0.85);
     border-collapse: collapse;
-    margin: 10px 0;
+    margin: 10px auto;
 }
 
 table thead tr {
