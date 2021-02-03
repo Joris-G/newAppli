@@ -833,7 +833,7 @@ class Traca {
         this.nomTraca.forEach(group => {
             const trGroup = document.createElement('tr');
             trGroup.classList.add('trGroup');
-            trGroup.id = group['ID'];
+            //trGroup.id = group['ID'];
             tbody.appendChild(trGroup);
             trGroup.onclick = () => {}
             const tdGroupId = document.createElement('td');
