@@ -692,6 +692,7 @@ class ViewContent {
         _group.items.forEach(operation => {
             //FILL OPERATIONS GROUP
             const operationElement = this.createElement('div', 'group-operation');
+            operationElement.id = `op-${operation.ID}`;
             this.appendElement(`#group-operations-${_group.ID}`, operationElement);
             //const divOpState = this.createElement('div');
             //const round = this.createElement('div', 'round');
@@ -762,6 +763,8 @@ class ViewContent {
         this.exitCurrentOperation()
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
+        this.getElement('.label-btnScan').click();
+        console.log('click');
         divOperation.appendChild(this.createOperation(operation, userList));
         this.hideAssemblyPanel();
     }
@@ -1256,9 +1259,8 @@ class Controller {
             const currentGroup = this.process.find(group => group.ID === this.operation.GROUPE);
             const indexCurrentOp = currentGroup.items.indexOf(currentGroup.items.find(op => op.ID === this.operation.ID));
             const nextOperation = currentGroup.items[indexCurrentOp + 1];
-            this.view.getElement(`#group-${currentGroup.ID}`).click();
+            this.view.getElement(`#op-${nextOperation.ID}`).click();
             this.view.displayOperation(nextOperation, this.userList);
-
         });
     }
 
