@@ -13,7 +13,7 @@ $nomTracaGroup = $query->fetchAll();
 foreach ($nomTracaGroup as $key_1 => $value_1) {
     $itemOfGroup = [];
     foreach ($nomTraca as $key_2 => $value_2) {
-        if ($value_2['GROUPE'] == $value_1['ID']) {
+        if ($value_2['GROUPE'] == $value_1['ORDRE']) {
             switch ($value_2['TYPE_TRACA']) {
                 case 'OF':
                     $sql = "SELECT * FROM t_nom_traca_of WHERE `ID TRACA` = :idTraca";

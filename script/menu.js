@@ -10,14 +10,24 @@ class MenuModel {
     async getMenu(_userRole) {
         return doAjaxThings("../data/menu.json", "json")
             .then(completeMenu => {
-                completeMenu.forEach(menu => {
-                    menu.item.forEach((subMenu, index) => {
-                        if (subMenu.roles.includes(_userRole)) {} else {
-                            menu.item.splice(index, 1);
-                        }
-                    });
+                const newMenu = [];
+                completeMenu.forEach((menuItem, menuIndex) => {
+                    if (menuItem.roles.includes(_userRole)) {
+                        const subMenuItems = [];
+                        menuItem.item.forEach((subMenuItem, subMenuIndex) => {
+                            if (subMenuItem.roles.includes(_userRole)) {
+                                subMenuItems.push(subMenuItem);
+                            }
+                        });
+                        const newMenuItem = {
+                            'id': menuItem.id,
+                            'name': menuItem.name,
+                            'item': subMenuItems
+                        };
+                        newMenu.push(newMenuItem);
+                    }
                 });
-                return completeMenu;
+                return newMenu;
             })
 
     }
@@ -52,32 +62,33 @@ class MenuView {
         menuBar.appendChild(divLogo);
 
         //Data of the menu
-        const ul = document.createElement('ul')
-        ul.classList.add('menu')
-        Object.keys(menu).forEach(levelOneMenu => {
+        const ul = document.createElement('ul');
+        ul.classList.add('menu');
+        menu.forEach((levelOneMenu, index) => {
             //premier niveau
-            const menus = document.createElement('li')
-            menus.classList.add('levelOneMenu')
-            menus.innerHTML = menu[levelOneMenu]['name']
-            ul.appendChild(menus)
-            const dropDownMenu = document.createElement('ul')
-            dropDownMenu.classList.add('dropDownMenu')
-            menus.appendChild(dropDownMenu)
-            Object.keys(menu[levelOneMenu]['item']).forEach(levelTwoMenu => {
+            const menus = document.createElement('li');
+            menus.classList.add('levelOneMenu');
+            menus.innerHTML = levelOneMenu['name'];
+            ul.appendChild(menus);
+            const dropDownMenu = document.createElement('ul');
+            dropDownMenu.classList.add('dropDownMenu');
+            menus.appendChild(dropDownMenu);
+            levelOneMenu.item.forEach(levelTwoMenu => {
                 //deuxième niveau
-                const item = document.createElement('li')
-                item.classList.add('dropDownItem')
-                const links = document.createElement('a')
-                links.setAttribute('href', `./${menu[levelOneMenu]['item'][levelTwoMenu]['file']}`)
-                links.innerHTML = menu[levelOneMenu]['item'][levelTwoMenu]['name']
+                const item = document.createElement('li');
+                item.classList.add('dropDownItem');
+                const links = document.createElement('a');
+
+                links.setAttribute('href', `./${levelTwoMenu['file']}`);
+                links.innerHTML = levelTwoMenu['name'];
                 links.onclick = () => {
-                    this.title = links.innerText
+                    this.title = links.innerText;
                 }
-                item.appendChild(links)
-                dropDownMenu.appendChild(item)
-            })
-        })
-        menuBar.appendChild(ul)
+                item.appendChild(links);
+                dropDownMenu.appendChild(item);
+            });
+        });
+        menuBar.appendChild(ul);
 
 
 
@@ -100,7 +111,7 @@ class MenuView {
         divTeam.innerHTML = `Equipe : ${teamNumber}`;
         const divAttributs = document.createElement('div');
         divAttributs.classList.add('user-attributes');
-        divAttributs.append(divRole, divTeam)
+        divAttributs.append(divRole, divTeam);
         divUser.append(divUserName, divAttributs);
         menuBar.appendChild(divUser);
 

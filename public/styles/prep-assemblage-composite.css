@@ -8,6 +8,10 @@
     margin: 0 15px;
 }
 
+.workWindow {
+    overflow-y: scroll;
+}
+
 .divInitCreation select {
     max-height: 20px;
 }

@@ -3,17 +3,18 @@ import { Div, Cellule, SelectItem, doAjaxThings } from "../toolBox.js";
 
 const body = document.querySelector('body');
 let traca;
-const promMaterialList = doAjaxThings('../script/php/getMaterialsList.php?secteur=ASSEMBLAGE COMPOSITE', 'json');
+
 const promToolList = doAjaxThings('../script/php/getToolList.php?secteur=3', 'json');
 //const promSectorsList = doAjaxThings('../script/php/getTypeList.php?', 'json');
 
 const divPrepAssy = new Div('module', body);
 // TITLE
-const divTitle = new Div('title-top', divPrepAssy);
-const title = 'Preparation assemblage';
+const divTitleTop = new Div('title-top', divPrepAssy);
+const divTitle = document.createElement('div');
+const title = 'Module Préparateur';
 divTitle.innerHTML = title.toUpperCase();
 divTitle.classList.add('title-font');
-
+divTitleTop.appendChild(divTitle);
 const divContent = new Div('content', divPrepAssy);
 const divLeftSideBar = new Div('leftSideBar', divContent);
 document.querySelector('.leftSideBar').style.width = '200px';
@@ -96,7 +97,7 @@ const buildEditTracaForm = function() {
     const divType = document.createElement('div');
     divType.id = 'div-type-op';
     divType.classList.add('hide');
-    const tracaType = new SelectItem(['Sélectionner le type', 'Matiere', 'Controle', 'OF']);
+    const tracaType = new SelectItem(['Sélectionner le type', 'Matiere', 'Controle', 'OF', 'Moulage']);
     tracaType.id = 'select-typeTraca';
     tracaType.classList.add('select');
     divType.appendChild(tracaType);
@@ -195,6 +196,8 @@ const generateOption = function(type) {
             case 'Matiere':
                 divInstructionText.innerHTML = `Sélectionner la matière à utiliser`;
                 let arrayListMaterials = [];
+                const article = articleAss.value;
+                const promMaterialList = doAjaxThings(`../script/php/getMaterialsList.php?article=${article}`, 'json');
                 promMaterialList.then((materialsList) => {
                     const testMinimumFilled = function() {
                         if (articleMat.selectedIndex != 0 && inputInstructions.value != "") {
@@ -206,7 +209,7 @@ const generateOption = function(type) {
                         }
                     }
                     materialsList.forEach(element => {
-                        arrayListMaterials.push([element['DESIGNATION SIMPLIFIEE'], element.ID]);
+                        arrayListMaterials.push([element['Designation'], element.Article]);
                     });
                     arrayListMaterials.unshift('Choisir une matière')
                     const articleMat = new SelectItem(arrayListMaterials);
@@ -356,6 +359,134 @@ const generateOption = function(type) {
                         }
                     }
                 });
+                break;
+
+            case 'Moulage':
+                const divMolding = document.createElement('div');
+                divMolding.classList.add('molding');
+
+                // input identification plis
+                const lblPlyIdentification = document.createElement('label');
+                lblPlyIdentification.innerText = 'Identification des plis';
+                const inputPlyIdentification = document.createElement('input');
+                //input nombre de séquence
+                const lblSequenceNumber = document.createElement('label');
+                lblSequenceNumber.innerText = 'Nombre de séquences';
+                const inputSequenceNumber = document.createElement('input');
+                //Paramètres compactages par défaut
+                const lblParamDebulk = document.createElement('label');
+                lblParamDebulk.innerText = 'Paramètre des compactages';
+                //input vide
+                const lblVaccum = document.createElement('label');
+                lblVaccum.innerText = 'Valeur de vide';
+                const inputVaccum = document.createElement('input');
+                //input time
+                const lblDuration = document.createElement('label');
+                lblDuration.innerText = 'Durée de compactage';
+                const inputDuration = document.createElement('input');
+                //image compactage
+
+                const btnGenerateMoldingTable = document.createElement('button');
+                btnGenerateMoldingTable.innerText = 'GENERER TABLEAU';
+                divMolding.append(lblPlyIdentification, inputPlyIdentification, lblSequenceNumber, inputSequenceNumber, lblParamDebulk, lblVaccum, inputVaccum, lblDuration, inputDuration, btnGenerateMoldingTable);
+                workWindow.appendChild(divMolding);
+                //génération tableau
+                btnGenerateMoldingTable.addEventListener('click', () => {
+                    const nbSequence = inputSequenceNumber.value;
+
+                    const tableMolding = document.createElement('table');
+                    const tableMoldingHeader = document.createElement('thead');
+                    const tableMoldingTrHeader = document.createElement('tr');
+                    const arrayColumn = ['Séquence', 'Matière', 'Orientation', 'Nombre de plis', 'Compactage après la séquence', 'Image'];
+
+                    for (let column = 0; column < arrayColumn.length; column++) {
+                        const tdHeader = document.createElement('td');
+                        tdHeader.innerText = arrayColumn[column];
+                        tableMoldingTrHeader.appendChild(tdHeader);
+                    }
+                    tableMoldingHeader.appendChild(tableMoldingTrHeader);
+
+                    for (let sequence = 0; sequence < nbSequence; sequence++) {
+                        const tr = document.createElement('tr');
+                        for (let column = 0; column < arrayColumn.length; column++) {
+                            const td = document.createElement('td');
+                            switch (column) {
+                                case 0:
+                                    td.innerText = `S${sequence+1}`;
+                                    break;
+                                case 1:
+                                    const article = articleAss.value;
+                                    const promMaterialList = doAjaxThings(`../script/php/getMaterialsList.php?article=${article}`, 'json');
+                                    promMaterialList.then(matList => {
+                                        const selectMatierial = document.createElement('select');
+                                        matList.forEach((option, index) => {
+                                            const selectOption = document.createElement('option');
+                                            selectOption.innerText = option.Designation;
+                                            selectOption.value = option.Article;
+                                            selectMatierial.appendChild(selectOption);
+                                        });
+                                        td.appendChild(selectMatierial);
+                                    });
+                                    break;
+                                case 2:
+                                    const selectOrientation = document.createElement('select');
+                                    const options = ['0°', '45°', 'N/A'];
+                                    options.forEach((option, index) => {
+                                        const selectOption = document.createElement('option');
+                                        selectOption.innerText = option;
+                                        selectOption.value = index;
+                                        selectOrientation.appendChild(selectOption);
+                                    });
+                                    td.appendChild(selectOrientation);
+                                    break;
+                                case 3:
+                                    const inputNumberOfPlies = document.createElement('input');
+                                    td.appendChild(inputNumberOfPlies);
+                                    break;
+                                case 4:
+                                    const checkboxDebulck = document.createElement('input');
+                                    checkboxDebulck.type = 'checkbox';
+                                    td.appendChild(checkboxDebulck);
+                                    break;
+                                case 5:
+                                    const lblAddPicture = document.createElement('label');
+                                    lblAddPicture.for = 'img-input';
+                                    lblAddPicture.innerText = '';
+                                    const btnSequenceImg = document.createElement('img');
+                                    btnSequenceImg.src = "../public/src/img/upload.png";
+                                    btnSequenceImg.classList.add('tbl-img');
+                                    const inputImgFile = document.createElement('input');
+                                    inputImgFile.type = "file";
+                                    inputImgFile.id = 'img-input';
+                                    inputImgFile.style.display = 'none';
+                                    inputImgFile.oninput = () => {
+                                        const endpoint = "../script/php/uploadMoldingTableImg.php";
+                                        const formData = new FormData();
+                                        formData.append("inputFile", inputImgFile.files[0]);
+                                        formData.append('idOp', item.ID);
+
+                                        fetch(endpoint, { method: "post", body: formData }).then(() => {
+
+                                        }).catch(console.error)
+                                    }
+                                    lblAddPicture.append(btnSequenceImg, inputImgFile);
+
+                                    td.append(lblAddPicture);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            tr.appendChild(td);
+                        }
+                        tableMolding.appendChild(tr);
+                    }
+                    tableMolding.append(tableMoldingHeader);
+                    // Lignes compactages modification des paramètres
+                    workWindow.appendChild(tableMolding);
+                });
+                const btnMoldingValidation = document.createElement('button');
+                btnMoldingValidation.innerText = 'Validation du drapage';
+                workWindow.appendChild(btnMoldingValidation);
                 break;
         }
     }
@@ -570,9 +701,11 @@ btnNewItem.onclick = () => {
                     const _mat = document.getElementById('select-mat');
                     TracaItem.prototype.matiere = null;
                     newItem.mat = _mat.value;
+                    const selectedIndex = _mat.selectedIndex;
+                    newItem.designation = _mat.options[selectedIndex].innerText;
                     newItem.instruction = inputInstructions.value;
                     promUpdateItems
-                        .then(doAjaxThings(`../script/php/addNewTraca.php?article=${newItem.article}&typeTraca=${newItem.type}&material=${newItem.mat}&instructions=${newItem.instruction}&idFAC=${newItem.ordre}&group=${newItem.group}`, 'text')
+                        .then(doAjaxThings(`../script/php/addNewTraca.php?article=${newItem.article}&typeTraca=${newItem.type}&material=${newItem.mat}&instructions=${newItem.instruction}&idFAC=${newItem.ordre}&group=${newItem.group}&designation=${newItem.designation}`, 'text')
                             .then(() => {
                                 removeLoader();
                                 const btnUpdate = document.getElementById('btnUpdateArticle');
@@ -1030,15 +1163,9 @@ class Traca {
                                 const trDetail = document.createElement('tr');
                                 trDetail.classList.add('trDetail', 'hide', item['ID']);
                                 const tdArticle = document.createElement('td');
-                                tdArticle.innerHTML = `Article : ${detail.ARTICLE}`;
+                                tdArticle.innerHTML = `Article : ${detail['ID ARTICLE']}`;
                                 tdArticle.colSpan = 2;
-                                const tdTemp = document.createElement('td');
-                                tdTemp.innerHTML = `Température : ${detail.TEMPERATURE}`;
-                                tdTemp.colSpan = 2;
-                                const tdHygro = document.createElement('td');
-                                tdHygro.innerHTML = `Hygrométrie : ${detail.HYGROMETRIE}`;
-                                tdHygro.colSpan = 2;
-                                trDetail.append(tdArticle, tdTemp, tdHygro);
+                                trDetail.append(tdArticle);
                                 tbody.appendChild(trDetail);
                             });
                             break;

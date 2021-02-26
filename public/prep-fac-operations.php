@@ -20,6 +20,7 @@ if (empty($_SESSION['username'])) {
         <div class='user' id='userName'><?php echo $_SESSION['username'] ?></div>
         <div class='user' id="role"><?php echo $_SESSION['role'] ?></div>
         <div class='user' id="matricule"><?php echo $_SESSION['matricule'] ?></div>
+        <div class='user' id="teamNumber"><?php echo $_SESSION['teamNumber'] ?></div>
     </div>
     <div id="content"></div>
 </body>

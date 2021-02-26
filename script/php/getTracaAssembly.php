@@ -22,7 +22,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
     $nbGroupItem = 0;
     $nbTraca = 0;
     foreach ($nomTraca as $key => $nomTracaItem) {
-        if ($nomTracaItem['GROUPE'] == $group['ID']) {
+        if ($nomTracaItem['GROUPE'] == $group['ORDRE']) {
             $nbGroupItem = $nbGroupItem + 1;
 
             //var_dump('je fais la traça de : ' . $nomTracaItem['ID']);

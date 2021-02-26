@@ -1,6 +1,7 @@
 [{
         "id": 1,
         "name": "Fichier",
+        "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"],
         "item": [{
                 "id": 1,
                 "name": "Moulage",
@@ -32,7 +33,7 @@
             {
                 "id": 5,
                 "name": "Utilisateur",
-                "secteur": "TOUS",
+                "secteur": "COMPOSITE",
                 "file": "OPERATEURS.php",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },
@@ -62,6 +63,7 @@
     {
         "id": 2,
         "name": "Option",
+        "roles": ["METHODE", "ADMIN"],
         "item": [{
                 "id": 1,
                 "name": "Thème",
@@ -79,7 +81,7 @@
             {
                 "id": 3,
                 "name": "Utilisateur",
-                "secteur": "TOUS",
+                "secteur": "COMPOSITE",
                 "file": "user.html",
                 "roles": ["METHODE", "ADMIN"]
             },
@@ -102,6 +104,7 @@
     {
         "id": 3,
         "name": "Vues d'ensemble",
+        "roles": ["METHODE", "CHEF", "ADMIN"],
         "item": [{
                 "id": 1,
                 "name": "GULFSTREAM ELEVATOR",
@@ -119,7 +122,7 @@
             {
                 "id": 3,
                 "name": "GULFSTREAM WINGLET",
-                "secteur": "TOUS",
+                "secteur": "COMPOSITE",
                 "file": "user.html",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },

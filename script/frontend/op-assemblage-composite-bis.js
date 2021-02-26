@@ -90,8 +90,8 @@ class Model {
      * 
      * @param {Number} _article 
      */
-    getAssyPart(_article) {
-        return doAjaxThings(`../script/php/getArticle.php?article=${_article}`, 'json');
+    getAssyPart(_article, _OF) {
+        return doAjaxThings(`../script/php/getArticle.php?article=${_article}&OF=${_OF}`, 'json');
     }
 
     /**
@@ -209,11 +209,14 @@ class ViewContent {
      * @return {HTMLDivElement} 
      * @memberof ViewContent
      */
-    createGroupElement(text, progress) {
+    createGroupElement(text, progress, docLink) {
         const group = this.createElement('div', 'group');
         const divTopGroup = this.createElement('div', 'topGroup');
         const titleGroup = this.createElement('div', 'titleGroup');
         titleGroup.innerText = text;
+        titleGroup.onclick = () => {
+            open(docLink, true);
+        }
         const divProgress = this.createElement('div', 'progressRate');
         divProgress.innerHTML = `${(progress*100).toFixed(0)}%`;
         if (progress == 0) {
@@ -245,7 +248,7 @@ class ViewContent {
         const divGroupTitle = this.createElement('div', 'groupe-title');
         const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').getAttribute('value'));
         assemblyStatus.then(process => {
-            const currentGroup = process.find(group => group.ID == _operation.GROUPE);
+            const currentGroup = process.find(group => group.ORDRE == _operation.GROUPE);
             divGroupTitle.innerHTML = currentGroup.DESCRIPTION;
         });
 
@@ -555,6 +558,7 @@ class ViewContent {
         divUserTable.appendChild(userTable);
         operation.append(operationTopBar, operationInstruction, divUserTable);
         operation.appendChild(divConfBtn);
+        this.getElement('.label-btnScan').click();
         return operation;
     }
 
@@ -673,7 +677,7 @@ class ViewContent {
         if (oldGroup) {
             oldGroup.remove();
         }
-        const groupElement = this.createGroupElement(_group.ID_GROUP, _group.PROGRESS);
+        const groupElement = this.createGroupElement(_group.ID_GROUP, _group.PROGRESS, _group.FI);
         groupElement.id = `group-${_group.ID}`;
         groupElement.onclick = () => {
             this.displayGroupOperations(_group.ID);
@@ -763,19 +767,17 @@ class ViewContent {
         this.exitCurrentOperation()
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
-        this.getElement('.label-btnScan').click();
-        console.log('click');
         divOperation.appendChild(this.createOperation(operation, userList));
-        this.hideAssemblyPanel();
+        //this.hideAssemblyPanel();
     }
 
     // this.getElement(`#operation-${_idOpe}`).style.display = 'flex';
     // this.getElement(`#operation-${_idOpe}`).classList.add('current-ope');
     displayPartDescription(_part, _workOrder) {
-        const designation = _part.desSimplifee;
-        const article = _part.numArticleSap;
+        const designation = _part[0].desSimplifee;
+        const article = _part[0].numArticleSap;
+        //UPDATE PART INFO
         if (this.getElement('.part-workorder') != null && this.getElement('.part-workorder').innerText == _workOrder) {
-            console.log('coucou1');
             this.getElement('.part-workorder').innerText = _workOrder;
             this.getElement('.part-article').innerText = article;
             this.getElement('.part-designation').innerText = designation;
@@ -784,6 +786,8 @@ class ViewContent {
                 console.log(this.getElement('.part-workorder').getAttribute('value'));
             }
 
+            //CREATE PART INFO
+            const partPropertiesList = [];
             const divPartDescription = this.getElement('.partDescription');
             const title = this.createElement('div', 'module-title');
             const divPartDes = this.createElement('div', 'part-description');
@@ -792,10 +796,19 @@ class ViewContent {
             const divPartArticle = this.createLabeledElement('part-article', 'Article : ', article);
             const divPartDesignation = this.createLabeledElement('part-designation', 'Désignation : ', designation);
             const divWorkorder = this.createLabeledElement('part-workorder', 'OF : ', _workOrder);
+            partPropertiesList.push(divPartArticle, divPartDesignation, divWorkorder);
+            const aircraftProgram = 'ELEVATOR G600';
+            const boxName = _part[1];
+            if (_part[1] != "") {
+                const divBoxName = this.createLabeledElement('box-name', 'Box : ', boxName);
+                partPropertiesList.push(divBoxName);
+            }
 
-            const divBoxName = this.createElement('div', 'box-name');
             const divProgress = this.createElement('div', 'assembly-progress');
-            divPartDes.append(divPartArticle, divPartDesignation, divWorkorder, divBoxName);
+            partPropertiesList.forEach(partProperty => {
+                divPartDes.append(partProperty);
+            });
+
             divPartDescription.append(divPartDes, title, divProgress);
         }
     }
@@ -979,7 +992,7 @@ class Controller {
     async assyWorkorderAction(_article, _OF) {
         this.article = _article;
         this.OF = _OF;
-        const assyPart = this.model.getAssyPart(_article);
+        const assyPart = this.model.getAssyPart(_article, _OF);
         const assemblyStatus = this.model.getAssemblyStatus(_article, _OF);
         return Promise.all([assyPart, assemblyStatus]).then(values => {
             const part = values[0];
