@@ -1,6 +1,7 @@
 @import "./menu.css";
 @import "./perso-button.css";
 @import "./perso-forms.css";
+@import "./perso-table.css";
 @font-face {
     font-family: 'Goldman';
     src: url('../src/font/Goldman-Regular.ttf');
@@ -26,6 +27,21 @@
     --perso-color-green2: rgb(73, 230, 120);
     --perso-font-daher: 'Raleway';
     font-size: 15px;
+}
+
+
+/* FONTS */
+
+.title-accent {
+    font-size: 1.8vw;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: var(--perso-color-bleuDaher2);
+    letter-spacing: 0.2vw;
+}
+
+.title {
+    font-size: 1.5vw;
 }
 
 .pointer {
@@ -57,6 +73,7 @@
 }
 
 body {
+    font-variant-numeric: lining-nums;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: max-content 100%;
@@ -90,7 +107,7 @@ body {
 
 .title-top {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 4fr 1fr;
     justify-content: left;
     align-items: center;
     margin: 10px;
@@ -102,8 +119,8 @@ body {
 
 .title-font {
     justify-self: center;
-    font-size: 30px;
-    color: white;
+    font-size: 3vw;
+    grid-column: 2 / 3;
 }
 
 #global-progress {
@@ -270,8 +287,8 @@ select {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 10px;
-    background-color: rgba(var(--perso-color-bleuDaher3), 0.2);
+    /* margin: 10px;
+    background-color: rgba(var(--perso-color-bleuDaher3), 0.2); */
 }
 
 
@@ -395,4 +412,36 @@ select {
 
 .tbl-img {
     height: 30px;
+}
+
+
+/* LABEL */
+
+.labeled-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.labeled-item {
+    display: flex;
+    flex-direction: row;
+    border-bottom: solid 1px white;
+    padding: 1vh 0;
+    width: 100%;
+    font-size: 0.9vw;
+}
+
+.labeled-item>.label {
+    justify-self: left;
+}
+
+@media (max-width: 1234px) {
+    .labeled-item {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+    .labeled-item>.label {
+        justify-self: auto;
+    }
 }

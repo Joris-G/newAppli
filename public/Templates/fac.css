@@ -5,9 +5,14 @@
     src: url('../src/font/Raleway-Regular.ttf'); */
 }
 
-@page {}
+@page {
+    size: portrait;
+}
 
 @media print {
+    @page {
+        size: portrait;
+    }
     .header {
         display: table-header-group;
     }
@@ -31,11 +36,17 @@
 }
 
 body {
+    width: 210mm;
     font-family: 'Raleway';
+    margin: 0;
 }
 
 
 /* HEADER */
+
+table {}
+
+table>thead {}
 
 .header .firstRow {
     display: flex;
@@ -53,31 +64,26 @@ body {
 }
 
 .header .thirdRow {
+    justify-self: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 100%;
     border: double 5px black;
     padding: 5px;
 }
 
 .header .thirdRow>div {
-    width: 50%;
     text-align: left;
+    width: 50%;
 }
 
-.content {
-    width: 100%;
-}
+.content {}
 
-body>table {
-    width: 100%;
-}
+body>table {}
 
 .header-group {
     display: flex;
     background-color: coral;
-    width: 100%;
     padding: 5px;
     page-break-before: always;
     font-weight: bold;
@@ -86,12 +92,12 @@ body>table {
 .step {
     display: flex;
     flex-direction: column;
-    width: 100%;
     align-content: space-between;
     border: double 4px black;
     padding: 3px;
     margin: 10px 0;
     page-break-inside: avoid;
+    height: fit-content;
 }
 
 .type {

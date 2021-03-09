@@ -22,19 +22,28 @@ if (empty($_SESSION['username'])) {
         <div class='user' id='userName'><?php echo $_SESSION['username'] ?></div>
         <div class='user' id="role"><?php echo $_SESSION['role'] ?></div>
         <div class='user' id="matricule"><?php echo $_SESSION['matricule'] ?></div>
+        <div class='user' id="teamNumber"><?php echo $_SESSION['teamNumber'] ?></div>
     </div>
     <section class="module">
         <section class="content">
             <section class="leftSideBar">
-                <div class="leftSideBarTitle">ASSEMBLAGE</div>
-                <section class="partDescription"></section>
+                <div class="topLeftSidebar">
+                    <div class="title-accent titleTop">ASSEMBLAGE</div>
                 <div class="divCommand"></div>
+            </div>
+                
+                <section class="partDescription"></section>
+                
                 <section class="divGroupStatus"></section>
             </section>
             <section class="section-operations">
-            <div class="OperationTitle">OPERATION</div>
+                <div class="opTopBar">
+                    <div class="leftOptButtonPan"></div>
+                    <div class="op-title-topBar title-accent">OPERATION</div>
+                    <div class="rightOptButtonPan"></div>
+                </div>
+            
             </section>
-            <section class="rightSideBar"></section>
         </section>
     </section>
 

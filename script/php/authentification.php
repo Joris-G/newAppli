@@ -17,10 +17,16 @@ if (count($_GET)<2) {
 $username = $result['NOM'] . ' ' . $result['PRENOM'];
 $matricule = $result['MATRICULE'];
 $role = $result['ROLE'];
+$teamNumber = $result['EQUIPE'];
+
 $_SESSION['matricule'] = $matricule;
 $_SESSION['role'] = $role;
 $_SESSION['username'] = $username;
+$_SESSION['teamNumber'] = $teamNumber;
 
+
+$sql = "UPDATE t_user SET `DERNIERE CONNEXION` = now() WHERE `ID` = :idUser";
+$query = $con->createQuery($sql,['idUser'=>$result['ID']]);
 echo json_encode($result);
 //var_dump($_SESSION);
 //header("Location: ../../public/index.html");

@@ -22,6 +22,13 @@ class Model {
         return doAjaxThings(`../script/php/getALlUsers.php`, 'json');
     }
 
+    getMatList() {
+        return doAjaxThings(`../script/php/getMaterialsList.php?secteur=ASSEMBLAGE COMPOSITE`, 'json');
+    }
+    getTeamUsers(teamNumber) {
+        return doAjaxThings(`../script/php/getTeamUsers.php?teamNumber=${teamNumber}`, 'json');
+    }
+
     getAllTools() {
         return doAjaxThings(`../script/php/getToolList.php?secteur=3`, 'json');
     }
@@ -83,8 +90,8 @@ class Model {
      * 
      * @param {Number} _article 
      */
-    getAssyPart(_article) {
-        return doAjaxThings(`../script/php/getArticle.php?article=${_article}`, 'json');
+    getAssyPart(_article, _OF) {
+        return doAjaxThings(`../script/php/getArticle.php?article=${_article}&OF=${_OF}`, 'json');
     }
 
     /**
@@ -98,6 +105,7 @@ class Model {
     getAssemblyStatus(_articleSap, _workOrder) {
         return new Promise((resolve, reject) => {
             const promProcess = this.getProcess(_articleSap);
+            //console.log(_workOrder, _articleSap);
             const promProgress = this.getProgress(_workOrder, _articleSap);
             const data = Promise.all([promProcess, promProgress]);
             data.then(result => {
@@ -124,25 +132,14 @@ class Model {
     }
 
 
-    saveTracaOf(_workOrder, _idFAC, _currentTraca, _userMatricule) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text');
-        // if (boxName != undefined) {
-        //     doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${this.workOrder}&listOf=${JSON.stringify(allTraca.allScanOF)}&idFac=${allTraca.tracaDatas[0]['ID TRACA']}&boxName=${boxName.value}&matricule=${matricule}`, 'text')
-        //         .then((msg) => {
-
-        //         });
-        // } else {
-        //     doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${this.workOrder}&listOf=${JSON.stringify(allTraca.allScanOF)}&idFac=${allTraca.tracaDatas[0]['ID TRACA']}&matricule=${matricule}`, 'text')
-        //         .then((msg) => {
-
-        //         });
-        // }
+    saveTracaOf(_workOrder, _idFAC, _currentTraca, _usersMatricules) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=OF&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}`, 'text');
     }
-    saveTracaMatiere(_workOrder, _idFAC, _currentTraca, _userMatricule) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=MATIERE&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}`, 'text')
+    saveTracaMatiere(_workOrder, _idFAC, _currentTraca, _usersMatricules) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=MATIERE&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}`, 'text')
     }
-    saveTracaControle(_workOrder, _idFAC, _currentTraca, _userMatricule, _sanction = null) {
-        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=Controle&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricule=${_userMatricule}&sanction=${_sanction}`, 'text');
+    saveTracaControle(_workOrder, _idFAC, _currentTraca, _usersMatricules, _sanction = null) {
+        return doAjaxThings(`../script/php/saveTraca.php?typeTraca=Controle&of=${_workOrder}&listOf=${JSON.stringify(_currentTraca)}&idFac=${_idFAC}&matricules=${_usersMatricules}&sanction=${_sanction}`, 'text');
     }
 
     getGroupStatus(_groupId) {
@@ -192,34 +189,66 @@ class ViewContent {
         return element;
     }
 
+    createLabeledElement(className, strLabel, value) {
+        const divLabeledItem = this.createElement('div', 'labeled-item');
+        //divContainer.classList.add('labeled-item');
+        const divLabel = this.createElement('div', 'label');
+        divLabel.innerText = strLabel;
+        const divValue = this.createElement('div', className);
+        divValue.innerText = value;
+        divValue.setAttribute('value', value);
+        divLabeledItem.append(divLabel, divValue);
+        return divLabeledItem;
+    }
+
     /**
      *
      *
-     * @param {String} textArrow
+     * @param {String} text
      * @param {Number} progress
      * @return {HTMLDivElement} 
      * @memberof ViewContent
      */
-    createGroupElement(textArrow, progress) {
-        const groupArrow = this.createElement('div', 'group-arrow');
+    createGroupElement(text, progress, docLink) {
+        const group = this.createElement('div', 'group');
+        const divTopGroup = this.createElement('div', 'topGroup');
+        const titleGroup = this.createElement('div', 'titleGroup');
+        titleGroup.innerText = text;
+        titleGroup.onclick = () => {
+            open(docLink, true);
+        }
         const divProgress = this.createElement('div', 'progressRate');
-        divProgress.innerHTML = `avancement : ${(progress*100).toFixed(0)} %`;
-        groupArrow.append(textArrow, divProgress);
-        return groupArrow;
+        divProgress.innerHTML = `${(progress*100).toFixed(0)}%`;
+        if (progress == 0) {
+            divProgress.style.backgroundColor = 'rgb(230, 69, 93)';
+        } else if (progress <= 0.25) {
+            divProgress.style.backgroundColor = 'rgb(240, 127, 80)';
+        } else if (progress <= 0.50) {
+            divProgress.style.backgroundColor = 'rgb(250, 193, 64)';
+        } else if (progress <= 0.75) {
+            divProgress.style.backgroundColor = 'rgb(212, 227, 81)';
+        } else if (progress <= 0.99) {
+            divProgress.style.backgroundColor = 'rgb(140, 241, 120)';
+        } else if (progress == 1) {
+            divProgress.style.backgroundColor = 'rgb(65, 255, 161)';
+        }
+        divTopGroup.append(titleGroup, divProgress);
+        group.append(divTopGroup);
+        return group;
     }
 
-    createOperation(_operation) {
+    createOperation(_operation, _userList) {
+        let userArray = [];
+        userArray.push(this.getElement('#matricule').innerHTML);
         const promGetAllECME = doAjaxThings(`../script/php/getECMEToolList.php?secteur=3`, 'json');
-        console.log(_operation);
+        console.log(`Opération :`, _operation);
         const operation = this.createElement('div', 'operation');
         operation.id = `operation-${_operation.ID}`;
         const operationTopBar = this.createElement('div', 'operation-top-bar');
-        const btnScan = new Bouton('scan');
-        btnScan.setEnable();
         const divGroupTitle = this.createElement('div', 'groupe-title');
-        const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').innerHTML);
+        const assemblyStatus = this.controller.getProcess(this.getElement('.part-article').getAttribute('value'));
         assemblyStatus.then(process => {
-            const currentGroup = process.find(group => group.ID == _operation.GROUPE);
+            const currentGroup = process.find(group => group.ORDRE == _operation.GROUPE);
             divGroupTitle.innerHTML = currentGroup.DESCRIPTION;
         });
 
@@ -228,29 +257,36 @@ class ViewContent {
         operationTypeText.innerText = _operation.TYPE_TRACA;
         const divImgType = this.createElement('img', 'operation-type-img');
         operationType.append(divImgType, operationTypeText);
-        operationTopBar.append(divGroupTitle, operationType);
+        operationTopBar.append(operationType, divGroupTitle);
         const operationInstruction = this.createElement('div', 'operation-instruction');
         operationInstruction.innerHTML = _operation.INSTRUCTIONS;
-        const operationDetails = this.createElement('div', 'operation_details');
+        const divImage = this.createElement('div', 'operation-img');
+        if (_operation.IMAGE != "") {
+            const opImgName = _operation.IMAGE;
+            const opImg = this.createElement('img', '');
+            opImg.src = `../public/src/img/FAC/${opImgName}`;
+            divImage.appendChild(opImg);
+            operation.appendChild(divImage);
+        }
+        const divConfBtn = this.createElement('div', 'divBtnConf');
         const btnConfirm = new Bouton('confirm');
+        divConfBtn.appendChild(btnConfirm.drawButton());
+
+        const divTable = this.createElement('div', 'tableaux');
         const table = document.createElement('table');
+        divTable.appendChild(table);
+        table.classList.add('perso-table-noBorder');
         const tableHeader = document.createElement('thead');
         const tableBody = document.createElement('tbody');
         const trHeader = document.createElement('tr');
 
         const tdDelete = document.createElement('td');
         tdDelete.innerHTML = "SUPPRIMER";
-        const tdDeleteCell = document.createElement('td');
-        const btnDelete = document.createElement('img');
-        btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
-        tdDeleteCell.classList.add('delete-cell');
-        btnDelete.classList.add('tbl-img');
-        tdDeleteCell.appendChild(btnDelete);
+
         const role = this.getElement('#role').innerHTML;
         switch (_operation.TYPE_TRACA) {
             case 'OF':
-                //operation.appendChild(btnScan.drawButton());
-                operationDetails.innerHTML = "";
+                divImgType.src = "../public/src/img/build.svg";
                 //HEADER
                 const tdArticle = document.createElement('td');
                 const tdHeaderPartDesignation = document.createElement('td');
@@ -271,6 +307,12 @@ class ViewContent {
                     const tdPartDesignation = document.createElement('td');
                     const tdPartQuatity = document.createElement('td');
                     const tdWorkOrder = document.createElement('td');
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onclick = () => {
                         ///////////////////////////
                         //ajouter un êtes vous sur !!!
@@ -324,13 +366,12 @@ class ViewContent {
 
                 //BOUTON CONFIRMER ACTION
                 const confirmOfAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray);
                 };
                 btnConfirm.setAction(confirmOfAction);
                 break;
             case 'Controle':
                 divImgType.src = "../public/src/img/shield.svg";
-                operationDetails.innerHTML = "";
                 //HEADER
                 const tdHeaderToolDesignation = document.createElement('td');
                 const tdScanTool = document.createElement('td');
@@ -345,6 +386,12 @@ class ViewContent {
                     const trToolToRecord = document.createElement('tr');
                     const tdToolDesignation = document.createElement('td');
                     const tdTool = document.createElement('td');
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onclick = () => {
                         ///////////////////////////
                         //ajouter un êtes vous sur !!!
@@ -380,17 +427,14 @@ class ViewContent {
                         table.classList.add('hidden');
                         tdTool.innerHTML = "N/A";
                         trToolToRecord.classList.add('full');
-                    } else {
-                        //operation.appendChild(btnScan.drawButton());
                     }
-
                     tdTool.classList.add('traca');
                     trToolToRecord.append(tdToolDesignation, tdTool);
                     if (role == "CONTROLE") trToolToRecord.appendChild(tdDeleteCell);
                     tableBody.appendChild(trToolToRecord);
                 });
                 const sanctionChoice = new SanctionBouton();
-                operationDetails.appendChild(sanctionChoice.drawButton());
+                operation.appendChild(sanctionChoice.drawButton());
                 //Remplissage
                 if (_operation.traca) {
                     const sanction = _operation.traca.SANCTION;
@@ -402,15 +446,13 @@ class ViewContent {
                 }
                 //BOUTON CONFIRMER ACTION
                 const confirmToolAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML, sanctionChoice.sanction);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray, sanctionChoice.sanction);
                 };
                 btnConfirm.setAction(confirmToolAction);
                 break;
             case 'Matiere':
 
                 divImgType.src = "../public/src/img/flask.svg";
-                //operation.appendChild(btnScan.drawButton());
-                operationDetails.innerHTML = "";
                 //HEADER
                 const tdHeaderMaterialDesignation = document.createElement('td');
                 const tdScanMat = document.createElement('td');
@@ -428,7 +470,12 @@ class ViewContent {
                     tdMatDesignation.innerHTML = element.DESIGNATION;
                     tdMat.id = element.ID;
                     tdMat.classList.add('traca');
-
+                    const tdDeleteCell = document.createElement('td');
+                    const btnDelete = document.createElement('img');
+                    btnDelete.src = "../public/src/img/poub_daher_bleue-03.png";
+                    tdDeleteCell.classList.add('delete-cell');
+                    btnDelete.classList.add('tbl-img');
+                    tdDeleteCell.appendChild(btnDelete);
                     tdDeleteCell.onmouseover = () => {
                         btnDelete.src = "../public/src/img/poub_daher_rouge-03.png";
                         trMatToRecord.classList.add('delete');
@@ -468,7 +515,7 @@ class ViewContent {
                 });
                 //BOUTON CONFIRMER ACTION
                 const confirmMatAction = () => {
-                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, this.getElement('#matricule').innerHTML);
+                    this.controller.confirmTracaAction(_operation, this.getElement('.part-workorder').innerHTML, userArray);
                 };
                 btnConfirm.setAction(confirmMatAction);
                 break;
@@ -477,9 +524,41 @@ class ViewContent {
         }
         //TABLE
         table.append(tableHeader, tableBody);
-        operationDetails.appendChild(table);
-        operation.append(operationTopBar, operationInstruction, operationDetails);
-        operation.appendChild(btnConfirm.drawButton());
+        operation.appendChild(divTable);
+
+        //Table user
+        const divUserTable = this.createElement('div', 'userTable');
+        const userTable = this.createElement('table', 'perso-table');
+        //header
+        const userTableHeader = this.createElement('thead', 'perso-table-thead');
+        const userTableTrHeader = this.createElement('tr', '');
+        const tdHeaderUserName = this.createElement('td', 'perso-table-thead-td');
+        tdHeaderUserName.innerText = `Utilisateurs`;
+        userTableTrHeader.appendChild(tdHeaderUserName);
+        userTableHeader.appendChild(userTableTrHeader);
+        //body
+        const userTableBody = this.createElement('tbody', 'perso-table-tbody');
+        _userList.forEach(user => {
+            const userTableTr = this.createElement('tr', 'perso-table-tbody-tr');
+            userTableTr.id = user.MATRICULE;
+            userTableTr.onclick = () => {
+                if (userTableTr.classList.contains('perso-table-selected-row')) {
+                    userArray.splice(userArray.indexOf(user.MATRICULE), 1);
+                } else {
+                    userArray.push(user.MATRICULE);
+                }
+                userTableTr.classList.toggle('perso-table-selected-row');
+            }
+            const userTableTd = this.createElement('td', 'perso-table-tbody-td');
+            userTableTd.innerText = `${user.PRENOM} ${user.NOM}`;
+            userTableTr.appendChild(userTableTd);
+            userTableBody.appendChild(userTableTr);
+        });
+        userTable.append(userTableHeader, userTableBody);
+        divUserTable.appendChild(userTable);
+        operation.append(operationTopBar, operationInstruction, divUserTable);
+        operation.appendChild(divConfBtn);
+        this.getElement('.label-btnScan').click();
         return operation;
     }
 
@@ -507,15 +586,53 @@ class ViewContent {
         return elements;
     }
 
-
     addScanInput() {
         const scanInput = new Input('scan', this.controller);
         this.appendElement('.module', scanInput.drawInput());
     }
+
     addScanButton() {
-        const btnScan = new Bouton('scan', null, null, 'S');
-        const content = this.getElement('.rightSideBar');
-        content.appendChild(btnScan.drawButton());
+        const divBtnScan = this.createElement('div', 'btn-scan');
+        divBtnScan.classList.add('bouton-green');
+        const imgBtnScan = this.createElement('img', 'imgBtnScan');
+        imgBtnScan.src = "../public/src/img/qr-code.svg";
+        const labelBtnScan = this.createElement('span', 'label-btnScan');
+        labelBtnScan.innerText = 'SCAN';
+        divBtnScan.append(imgBtnScan, labelBtnScan);
+        const rightOptButtonPan = this.getElement('.rightOptButtonPan');
+        rightOptButtonPan.appendChild(divBtnScan);
+        document.addEventListener('click', (ev) => {
+            if (ev.target != imgBtnScan && ev.target != labelBtnScan) {
+                if (divBtnScan.classList.contains('bouton-green')) {
+                    divBtnScan.classList.add('bouton-red');
+                    divBtnScan.classList.remove('bouton-green');
+                    document.querySelector('.scan-input').blur();
+                }
+            }
+        });
+        divBtnScan.onclick = () => {
+            if (divBtnScan.classList.contains('bouton-red')) {
+                divBtnScan.classList.add('bouton-green');
+                divBtnScan.classList.remove('bouton-red');
+                document.querySelector('.scan-input').focus();
+            } else {
+                divBtnScan.classList.remove('bouton-green');
+                divBtnScan.classList.add('bouton-red');
+                document.querySelector('.scan-input').blur();
+            }
+        }
+    }
+
+    addControlPanelButton() {
+        const divControlPanelButton = this.createElement('div', 'control-panel-button');
+        const imgCtrlPanBtn = this.createElement('img', 'ctrl-pan-img');
+        imgCtrlPanBtn.src = '../public/src/img/arrow-point-to-right.svg';
+        divControlPanelButton.appendChild(imgCtrlPanBtn);
+        const leftOptButtonPan = this.getElement('.leftOptButtonPan');
+        leftOptButtonPan.appendChild(divControlPanelButton);
+        divControlPanelButton.addEventListener('click', () => {
+            this.hideAssemblyPanel();
+        });
     }
 
     addFacButton() {
@@ -523,41 +640,44 @@ class ViewContent {
         if (getBtnFac) {
             return getBtnFac;
         } else {
-            const btnFac = new Bouton('default', 'FAC', null, 'S');
-            const content = this.getElement('.rightSideBar');
-            const drawBtn = btnFac.drawButton();
-            drawBtn.classList.add('facButton', 'btn-primary');
-            content.appendChild(drawBtn);
-            return drawBtn;
+            const divBtnFac = this.createElement('div', 'facButton');
+            const imgFac = this.createElement('img', 'imgFac');
+            imgFac.src = "../public/src/img/contract.svg"
+            const labelFac = this.createElement('span', 'labelFac');
+            labelFac.innerText = "FAC";
+            divBtnFac.append(imgFac, labelFac);
+            const rightOptButtonPan = this.getElement('.rightOptButtonPan');
+            rightOptButtonPan.appendChild(divBtnFac);
+            return divBtnFac;
         }
+    }
+
+    hideAssemblyPanel() {
+        this.getElement('.leftSideBar').classList.toggle('hidenLeftPanel');
+        this.getElement('.section-operations').classList.toggle('grow-section-operations');
     }
 
     displayGroup(_group, _arrow) {
         // BOUTON QUITTER ASSY
         const btnExitAssy = this.getElement('.divCommand');
-        btnExitAssy.innerText = "QUITTER L'ASSEMBLAGE"
-        btnExitAssy.classList.add('btn', 'btn-L', 'btn-primary');
         btnExitAssy.onclick = () => {
-            const modalBox = new ModalBox('YES_NO', `êtes-vous sûr de vouloir quitter cet assemblage ?`);
-            modalBox.yesButton.onclick = () => {
-                modalBox.removeBox();
-                document.location.reload();
+                const modalBox = new ModalBox('YES_NO', `êtes-vous sûr de vouloir quitter cet assemblage ?`);
+                modalBox.yesButton.onclick = () => {
+                    modalBox.removeBox();
+                    document.location.reload();
+                }
+                modalBox.noButton.onclick = () => {
+                    modalBox.removeBox();
+                    this.getElement('.operation').remove();
+                    this.controller.assyWorkorderAction(this.getElement('.part-article').getAttribute('value'), this.getElement('.part-workorder').getAttribute('value'));
+                }
             }
-            modalBox.noButton.onclick = () => {
-                modalBox.removeBox();
-                this.getElement('.operation').remove();
-                this.controller.assyWorkorderAction(this.getElement('.part-article').innerText, this.getElement('.part-workorder').innerText);
-            }
-
-
-        }
-
-        //ADD ARROWS TO LEFTSIDEBAR
+            //ADD ARROWS TO LEFTSIDEBAR
         const oldGroup = this.getElement(`#group-${_group.ID}`)
         if (oldGroup) {
             oldGroup.remove();
         }
-        const groupElement = this.createGroupElement(_group.ID_GROUP, _group.PROGRESS);
+        const groupElement = this.createGroupElement(_group.ID_GROUP, _group.PROGRESS, _group.FI);
         groupElement.id = `group-${_group.ID}`;
         groupElement.onclick = () => {
             this.displayGroupOperations(_group.ID);
@@ -576,6 +696,7 @@ class ViewContent {
         _group.items.forEach(operation => {
             //FILL OPERATIONS GROUP
             const operationElement = this.createElement('div', 'group-operation');
+            operationElement.id = `op-${operation.ID}`;
             this.appendElement(`#group-operations-${_group.ID}`, operationElement);
             //const divOpState = this.createElement('div');
             //const round = this.createElement('div', 'round');
@@ -642,21 +763,54 @@ class ViewContent {
         //this.exitCurrentOperation()
     }
 
-    displayOperation(operation) {
+    displayOperation(operation, userList) {
         this.exitCurrentOperation()
             //CREATE OPERATION
         const divOperation = this.getElement('.section-operations');
-        divOperation.appendChild(this.createOperation(operation));
+        divOperation.appendChild(this.createOperation(operation, userList));
+        //this.hideAssemblyPanel();
     }
 
     // this.getElement(`#operation-${_idOpe}`).style.display = 'flex';
     // this.getElement(`#operation-${_idOpe}`).classList.add('current-ope');
     displayPartDescription(_part, _workOrder) {
-        const designation = _part.desSimplifee;
-        const article = _part.numArticleSap;
-        this.getElement('.part-article').innerHTML = article;
-        this.getElement('.part-designation').innerHTML = designation;
-        this.getElement('.part-workorder').innerHTML = _workOrder
+        const designation = _part[0].desSimplifee;
+        const article = _part[0].numArticleSap;
+        //UPDATE PART INFO
+        if (this.getElement('.part-workorder') != null && this.getElement('.part-workorder').innerText == _workOrder) {
+            this.getElement('.part-workorder').innerText = _workOrder;
+            this.getElement('.part-article').innerText = article;
+            this.getElement('.part-designation').innerText = designation;
+        } else {
+            if (this.getElement('.part-workorder')) {
+                console.log(this.getElement('.part-workorder').getAttribute('value'));
+            }
+
+            //CREATE PART INFO
+            const partPropertiesList = [];
+            const divPartDescription = this.getElement('.partDescription');
+            const title = this.createElement('div', 'module-title');
+            const divPartDes = this.createElement('div', 'part-description');
+            divPartDes.classList.add('labeled-container');
+
+            const divPartArticle = this.createLabeledElement('part-article', 'Article : ', article);
+            const divPartDesignation = this.createLabeledElement('part-designation', 'Désignation : ', designation);
+            const divWorkorder = this.createLabeledElement('part-workorder', 'OF : ', _workOrder);
+            partPropertiesList.push(divPartArticle, divPartDesignation, divWorkorder);
+            const aircraftProgram = 'ELEVATOR G600';
+            const boxName = _part[1];
+            if (_part[1] != "") {
+                const divBoxName = this.createLabeledElement('box-name', 'Box : ', boxName);
+                partPropertiesList.push(divBoxName);
+            }
+
+            const divProgress = this.createElement('div', 'assembly-progress');
+            partPropertiesList.forEach(partProperty => {
+                divPartDes.append(partProperty);
+            });
+
+            divPartDescription.append(divPartDes, title, divProgress);
+        }
     }
 
     exitCurrentOperation() {
@@ -665,25 +819,6 @@ class ViewContent {
 
     appendElement(selector, element) {
         this.getElement(selector).appendChild(element);
-    }
-
-    /**
-     *
-     *
-     * @param {string} _title
-     * @memberof ViewContent
-     */
-    addTitle() {
-        const divPartDescription = this.getElement('.partDescription');
-        const title = this.createElement('div', 'module-title');
-        const divPartDes = this.createElement('div', 'part-description');
-        const divPartArticle = this.createElement('div', 'part-article');
-        const divPartDesignation = this.createElement('div', 'part-designation');
-        const divWorkorder = this.createElement('div', 'part-workorder');
-        const divBoxName = this.createElement('div', 'box-name');
-        const divProgress = this.createElement('div', 'assembly-progress');
-        divPartDes.append(divPartArticle, divPartDesignation, divWorkorder, divBoxName, );
-        divPartDescription.append(divPartDes, title, divProgress);
     }
 }
 class Controller {
@@ -695,9 +830,13 @@ class Controller {
     }
     initPage() {
         this.view.addScanInput();
-        this.view.addTitle();
         this.view.getElement('.scan-input').focus();
         this.view.addScanButton();
+        this.view.addControlPanelButton();
+        const btnExitAssy = this.view.getElement('.divCommand');
+        const imgExit = this.view.createElement('img', 'img-quit');
+        imgExit.src = "../public/src/img/curve-arrow.png";
+        btnExitAssy.appendChild(imgExit);
     }
 
     getProcess(_article) {
@@ -712,7 +851,7 @@ class Controller {
      */
     ofAction(_inputOf) {
         //SI on est sur une page début assy
-        if (this.view.getElement('.part-workorder').innerHTML != "") {
+        if (this.view.getElement('.part-workorder') != undefined && this.view.getElement('.part-workorder') != null) {
             this.addOfAction(_inputOf);
         } else {
             this.assyWorkorderAction(_inputOf[0], _inputOf[1]);
@@ -776,8 +915,8 @@ class Controller {
         }
     }
 
-
     materialAction(_inputMaterial) {
+        console.log(_inputMaterial);
         const idOperation = this.view.getElement('.operation').id;
         const id = idOperation.split('-')[1];
         const traca = this.model.getTraca(id)
@@ -793,8 +932,8 @@ class Controller {
                     } else {
                         console.log('traca pas complete');
                         console.log(_inputMaterial);
-                        console.log(tracaDetail.ARTICLE);
-                        if (tracaDetail.ARTICLE == _inputMaterial[0]) {
+                        console.log(tracaDetail);
+                        if (tracaDetail['ID ARTICLE'] == _inputMaterial[0]) {
                             mat = true;
                             console.log("C'est la bonne matiere");
                             const tracaCells = document.getElementById(tracaDetail['ID']);
@@ -853,7 +992,7 @@ class Controller {
     async assyWorkorderAction(_article, _OF) {
         this.article = _article;
         this.OF = _OF;
-        const assyPart = this.model.getAssyPart(_article);
+        const assyPart = this.model.getAssyPart(_article, _OF);
         const assemblyStatus = this.model.getAssemblyStatus(_article, _OF);
         return Promise.all([assyPart, assemblyStatus]).then(values => {
             const part = values[0];
@@ -988,10 +1127,10 @@ class Controller {
             // TEST ROLE
             const role = this.view.getElement('#role').innerHTML;
             if (role != 'CONTROLE') {
-                console.log('roleReject');
+                //console.log('roleReject');
                 reject('role');
             } else {
-                console.log('promRole OK');
+                //console.log('promRole OK');
                 resolve(true);
             }
         });
@@ -999,67 +1138,38 @@ class Controller {
         const promStatus = new Promise((resolve, reject) => {
             //TEST STATUT DE L'OPERATION
             if (this.operation.STATUS != 1) {
-                console.log('promStatus OK');
+                //console.log('promStatus OK');
                 resolve(true);
             } else {
                 reject('status');
             }
         });
         Promise.allSettled([promStatus, promRole]).then(values => {
-            console.log(values);
-            if (this.operation.nomTracaDetail[0].ROLE == 1) {
-                if (values[1].status == "fulfilled") this.view.displayOperation(this.operation);
-            } else {
-                if (values[0].status == "fulfilled") {
-                    this.view.displayOperation(this.operation);
-                } else {
-                    const role = this.view.getElement('#role').innerHTML;
-                    if (role == "CONTROLE") {
-                        this.view.displayOperation(this.operation);
+            //console.log(values);
+            const teamNumber = this.view.getElement('#teamNumber').innerHTML;
+            this.model.getTeamUsers(teamNumber).then((userList) => {
+                    this.userList = userList
+                    if (this.operation.nomTracaDetail[0].ROLE == 1) {
+                        if (values[1].status == "fulfilled") this.view.displayOperation(this.operation, this.userList);
                     } else {
-                        this.qualityUserNeed('role');
+                        if (values[0].status == "fulfilled") {
+                            this.view.displayOperation(this.operation, this.userList);
+                        } else {
+                            const role = this.view.getElement('#role').innerHTML;
+                            if (role == "CONTROLE") {
+                                this.view.displayOperation(this.operation, this.userList);
+                            } else {
+                                this.qualityUserNeed('role');
+                            }
+                        }
                     }
+                },
+                (error) => {
+                    console.error(error);
                 }
-            }
-
-
+            );
         });
-
-
-
-        // promStatus.then(() => {
-        //     console.log('Status OK');
-        //     this.view.displayOperation(this.operation);
-        // }, () => {
-        //     promRole.then(() => {
-        //         this.view.displayOperation(this.operation);
-        //     }, () => {
-        //         console.log('role No OK');
-        //         this.qualityUserNeed('role');
-        //     });
-        // });
-
-        // Promise.allSettled([promStatus, promRole]).then(values => {
-        //     //OUVERTURE DE L 'OP
-        //     console.log(values);
-        //     this.view.displayOperation(this.operation);
-        // }, reject => {
-        //     console.log(reject);
-        //     if (reject[0] == )
-        // }).catch(type => {
-        //     console.log(type);
-        //     promRole.then(value => {
-        //         console.log(value);
-        //         if (value != true) {
-        //             this.qualityUserNeed(type);
-        //         } else {
-        //             this.view.displayOperation(this.operation);
-        //         }
-        //     })
-        // });
-
     }
-
 
     //ACTION SI ROLE PAS BON
     qualityUserNeed(_type) {
@@ -1089,7 +1199,8 @@ class Controller {
                 if (response.ROLE == 'CONTROLE') {
                     msgModal.removeBox();
                     this.alternateUser = response;
-                    this.view.displayOperation(this.operation);
+                    console.log(this.userList);
+                    this.view.displayOperation(this.operation, this.userList);
                     return true;
                 } else {
                     return false;
@@ -1115,13 +1226,13 @@ class Controller {
     }
 
 
-    confirmTracaAction(_operation, _workOrder, _userMatricule, sanction = null) {
+    confirmTracaAction(_operation, _workOrder, _usersMatricule, sanction = null) {
         const btnExitAssy = this.view.getElement('.divCommand');
         switch (_operation.TYPE_TRACA) {
             case 'OF':
                 const boxName = document.getElementById('input-box-name');
                 const listOf = this.getTraca();
-                this.model.saveTracaOf(_workOrder, _operation.ID, listOf, _userMatricule).then(() => {
+                this.model.saveTracaOf(_workOrder, _operation.ID, listOf, _usersMatricule).then(() => {
                     this.afterSaveData();
                 });
                 break;
@@ -1137,7 +1248,7 @@ class Controller {
                         listTool[index].of = newToolOf.ID;
                     });
                     console.log(listTool);
-                    this.model.saveTracaControle(_workOrder, _operation.ID, listTool, _userMatricule, sanction).then(() => {
+                    this.model.saveTracaControle(_workOrder, _operation.ID, listTool, _usersMatricule, sanction).then(() => {
                         this.afterSaveData();
                     });
                 });
@@ -1146,7 +1257,8 @@ class Controller {
                 break;
             case 'Matiere':
                 const listMatiere = this.getTraca();
-                this.model.saveTracaMatiere(_workOrder, _operation.ID, listMatiere, _userMatricule).then(() => {
+                console.log(listMatiere);
+                this.model.saveTracaMatiere(_workOrder, _operation.ID, listMatiere, _usersMatricule).then(() => {
                     this.afterSaveData();
                 });
                 break;
@@ -1157,25 +1269,29 @@ class Controller {
 
     }
     afterSaveData() {
-        const currentGroup = this.process.find(group => group.ID === this.operation.GROUPE);
-        const indexCurrentOp = currentGroup.items.indexOf(currentGroup.items.find(op => op.ID === this.operation.ID));
-        const nextOperation = currentGroup.items[indexCurrentOp + 1];
         this.assyWorkorderAction(this.article, this.OF).then(() => {
-
-            this.view.getElement(`#group-${currentGroup.ID}`).click();
-            this.view.displayOperation(nextOperation);
-
+            const currentGroup = this.process.find(group => group.ID === this.operation.GROUPE);
+            const indexCurrentOp = currentGroup.items.indexOf(currentGroup.items.find(op => op.ID === this.operation.ID));
+            const nextOperation = currentGroup.items[indexCurrentOp + 1];
+            this.view.getElement(`#op-${nextOperation.ID}`).click();
+            this.view.displayOperation(nextOperation, this.userList);
         });
     }
 
     generateFac() {
         const promGetAllUsers = this.model.getAllUsers();
         const promGetAllTools = this.model.getAllTools();
+        const promGetMatList = this.model.getMatList();
         const facWindow = window.open('../public/Templates/fac.html')
         facWindow.onload = () => {
             //HEADER
+            const divAssemblyDesignation = facWindow.document.querySelector('.designation');
+            const divAssemblyReference = facWindow.document.querySelector('.reference');
+            const divAssemblyWorkorder = facWindow.document.querySelector('.of');
 
-
+            divAssemblyReference.innerText = this.view.getElement('.part-article').getAttribute('value');
+            divAssemblyDesignation.innerText = this.view.getElement('.part-designation').getAttribute('value');
+            divAssemblyWorkorder.innerText = this.view.getElement('.part-workorder').getAttribute('value');
             //CONTENT
             const divContent = facWindow.document.querySelector('.content');
             console.log(this.process);
@@ -1205,8 +1321,6 @@ class Controller {
 
                     switch (step.TYPE_TRACA) {
                         case 'Controle':
-                            console.log(step);
-                            console.log(step.nomTracaDetail);
                             if (step.nomTracaDetail[0].OUTILLAGE != 26) {
                                 const tableTools = document.createElement('table');
                                 //TABLE TOOL HEADER
@@ -1229,11 +1343,20 @@ class Controller {
                                         tdDetailDes.innerText = tool.TYPE;
                                     });
                                     const tdDetailSN = document.createElement('td');
-                                    if (step.traca) {
-                                        //step.traca.tracaDetails.find();
-                                        trDetail.append(tdDetailDes, tdDetailSN);
-                                        tbBody.appendChild(trDetail);
+                                    if (step.traca !== undefined) {
+                                        if (step.traca.tracaDetails.length > 0) {
+                                            const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_NOM_CONTROLE == tracaDetail.ID);
+                                            if (recordedTraca) {
+                                                const promGetAllECME = doAjaxThings(`../script/php/getECMEToolList.php?secteur=3`, 'json');
+                                                promGetAllECME.then((ecmeList) => {
+                                                    const ECME = ecmeList.find(ecme => ecme.ID == recordedTraca.OUTIL);
+                                                    tdDetailSN.innerHTML = ECME.REFERENCE;
+                                                });
+                                            }
+                                        }
                                     }
+                                    trDetail.append(tdDetailDes, tdDetailSN);
+                                    tbBody.appendChild(trDetail);
                                 });
                                 //TABLE TOOLS FOOTER
                                 const tbFooter = document.createElement('tfoot');
@@ -1254,10 +1377,15 @@ class Controller {
                                 operatorName.classList.add('opName');
                                 const operatorMatricule = document.createElement('div');
                                 operatorMatricule.classList.add('opMat');
-                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                operatorMatricule.innerText = 'Matricules : ';
+                                operatorName.innerText = 'NOM : '
                                 promGetAllUsers.then(users => {
-                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
-                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
                                 });
                                 operator.append(operatorName, operatorMatricule);
                                 const sanction = document.createElement('div');
@@ -1300,11 +1428,21 @@ class Controller {
                             step.nomTracaDetail.forEach(tracaDetail => {
                                 const trMatDetail = document.createElement('tr');
                                 const tdMatDetailDes = document.createElement('td');
-                                promGetAllTools.then(tools => {
-                                    const tool = tools.find(tool => tool.ID == tracaDetail.OUTILLAGE);
-                                    tdMatDetailDes.innerText = tool.TYPE;
+                                promGetMatList.then(matList => {
+                                    console.log(matList);
+                                    const mat = matList.find(mat => mat.ID == tracaDetail.ARTICLE);
+                                    console.log(mat);
+                                    tdMatDetailDes.innerText = mat['DESIGNATION SIMPLIFIEE'];
                                 });
                                 const tdMatDetailSN = document.createElement('td');
+                                if (step.traca !== undefined) {
+                                    if (step.traca.tracaDetails.length > 0) {
+                                        const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_NOM_MATIERE == tracaDetail.ID);
+                                        if (recordedTraca) {
+                                            tdMatDetailSN.innerHTML = recordedTraca['ID MAT ENTRY'];
+                                        }
+                                    }
+                                }
                                 trMatDetail.append(tdMatDetailDes, tdMatDetailSN);
                                 tbMatBody.appendChild(trMatDetail);
                             });
@@ -1325,10 +1463,15 @@ class Controller {
                                 operatorName.classList.add('opName');
                                 const operatorMatricule = document.createElement('div');
                                 operatorMatricule.classList.add('opMat');
-                                operatorMatricule.innerText = 'Matricule : ' + step.traca.USER;
+                                operatorMatricule.innerText = 'Matricules : ';
+                                operatorName.innerText = 'NOM : '
                                 promGetAllUsers.then(users => {
-                                    const theUser = users.find(user => user.MATRICULE == step.traca.USER);
-                                    operatorName.innerText = 'NOM : ' + theUser.NOM + ' ' + theUser.PRENOM;
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
                                 });
                                 operator.append(operatorName, operatorMatricule);
                                 const sanction = document.createElement('div');
@@ -1356,35 +1499,91 @@ class Controller {
 
 
                         case 'OF':
-                            // const tableParts = document.createElement('table');
-                            // //TABLE TOOL HEADER
-                            // const tbHeader = document.createElement('thead');
-                            // const trHeader = document.createElement('tr');
-                            // const tdPN = document.createElement('td');
-                            // tdPN.innerText = 'P/N';
-                            // const tdQty = document.createElement('td');
-                            // tdQty.innerText = 'Quantité';
-                            // const tdDes = document.createElement('td');
-                            // tdDes.innerText = 'Description';
-                            // const tdSN = document.createElement('td');
-                            // tdSN.innerText = 'S/N'
+                            const tableParts = document.createElement('table');
+                            //TABLE TOOL HEADER
+                            const tbOfHeader = document.createElement('thead');
+                            const trOfHeader = document.createElement('tr');
+                            const tdOfPN = document.createElement('td');
+                            tdOfPN.innerText = 'P/N';
+                            const tdOfQty = document.createElement('td');
+                            tdOfQty.innerText = 'Quantité';
+                            const tdOfDes = document.createElement('td');
+                            tdOfDes.innerText = 'Description';
+                            const tdOfSN = document.createElement('td');
+                            tdOfSN.innerText = 'S/N'
 
-                            // trHeader.append(tdPN, tdQty, tdDes, tdSN);
-                            // tbHeader.appendChild(trHeader);
-                            // //TABLE TOOLS BODY
-                            // const tbBody = document.createElement('tbody');
-                            // step.nomTracaDetail.forEach(tracaDetail => {
-                            //     const trDetail = document.createElement('tr');
-                            //     const tdDetailPN = document.createElement('td');
-                            //     const tdDetailQty = document.createElement('td');
-                            //     const tdDetailDes = document.createElement('td');
-                            //     const tdDetailSN = document.createElement('td');
-                            // });
-                            // //TABLE TOOLS FOOTER
-                            // const tbFooter = document.createElement('tfoot');
+                            trOfHeader.append(tdOfPN, tdOfQty, tdOfDes, tdOfSN);
+                            tbOfHeader.appendChild(trOfHeader);
+                            //TABLE TOOLS BODY
+                            const tbOfBody = document.createElement('tbody');
+                            step.nomTracaDetail.forEach(tracaDetail => {
+                                console.log(tracaDetail);
+                                const trOfDetail = document.createElement('tr');
+                                const tdOfDetailPN = document.createElement('td');
+                                tdOfDetailPN.innerText = tracaDetail.ARTICLE;
+                                const tdOfDetailQty = document.createElement('td');
+                                tdOfDetailQty.innerText = tracaDetail.QUANTITE;
+                                const tdOfDetailDes = document.createElement('td');
+                                tdOfDetailDes.innerText = tracaDetail.DESIGNATION;
+                                const tdOfDetailSN = document.createElement('td');
+                                if (step.traca !== undefined) {
+                                    if (step.traca.tracaDetails.length > 0) {
+                                        const recordedTraca = step.traca.tracaDetails.find(recordedTraca => recordedTraca.ID_TRACA_OF == tracaDetail.ID);
+                                        if (recordedTraca) {
+                                            tdOfDetailSN.innerHTML = recordedTraca.OF;
+                                        }
+                                    }
+                                }
+                                trOfDetail.append(tdOfDetailPN, tdOfDetailQty, tdOfDetailDes, tdOfDetailSN);
+                                tbOfBody.appendChild(trOfDetail);
+                            });
+                            //TABLE TOOLS FOOTER
+                            const tbFooter = document.createElement('tfoot');
 
-                            // //TABLE APPEND ELEMENT
-                            // tableTools.append(tbHeader, tbBody, tbFooter);
+                            //TABLE APPEND ELEMENT
+                            tableParts.append(tbOfHeader, tbOfBody, tbFooter);
+                            stepThirdRow.appendChild(tableParts);
+
+                            //STEP FINAL
+                            if (step.traca) {
+                                const operator = document.createElement('div');
+                                operator.classList.add('operator');
+                                const operatorName = document.createElement('div');
+                                operatorName.classList.add('opName');
+                                const operatorMatricule = document.createElement('div');
+                                operatorMatricule.classList.add('opMat');
+                                console.log(step.traca.USERS);
+                                operatorMatricule.innerText = 'Matricules : '
+                                operatorName.innerText = 'NOM : '
+                                promGetAllUsers.then(users => {
+                                    step.traca.USERS.forEach(recordedUser => {
+                                        console.log(recordedUser);
+                                        const theUser = users.find(user => user.MATRICULE == recordedUser.MATRICULE);
+                                        operatorName.innerText += theUser.NOM + ' ' + theUser.PRENOM + ' , ';
+                                        operatorMatricule.innerText += theUser.MATRICULE + '  ,';
+                                    });
+                                });
+                                operator.append(operatorName, operatorMatricule);
+                                const sanction = document.createElement('div');
+                                sanction.classList.add('sanction');
+                                const sanctionDate = document.createElement('div');
+                                sanctionDate.classList.add('sanctionDate');
+                                sanctionDate.innerText = 'Date : ' + step.traca['DATE DE CREATION'];
+                                const sanctionValue = document.createElement('div');
+                                sanctionValue.classList.add('sanctionValue');
+                                if (step.traca.SANCTION == 1) {
+                                    sanctionValue.innerText = 'CONFORME';
+                                } else {
+                                    sanctionValue.innerText = 'NON-CONFORME';
+                                }
+                                sanction.append(sanctionDate, sanctionValue);
+
+                                stepForthRow.append(operator, sanction);
+                            } else {
+                                const divNA = document.createElement('div');
+                                divNA.innerText = "Opération non réalisée";
+                                stepForthRow.append(divNA);
+                            }
                             break;
                         default:
                             break;

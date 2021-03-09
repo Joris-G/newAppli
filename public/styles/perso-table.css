@@ -1,0 +1,11 @@
+.perso-table-selected-row td {
+    background-color: aqua;
+}
+
+.perso-table-thead-td {
+    text-transform: capitalize;
+}
+
+.perso-table-noBorder {
+    border: none;
+}

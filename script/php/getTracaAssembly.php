@@ -22,7 +22,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
     $nbGroupItem = 0;
     $nbTraca = 0;
     foreach ($nomTraca as $key => $nomTracaItem) {
-        if ($nomTracaItem['GROUPE'] == $group['ID']) {
+        if ($nomTracaItem['GROUPE'] == $group['ORDRE']) {
             $nbGroupItem = $nbGroupItem + 1;
 
             //var_dump('je fais la traça de : ' . $nomTracaItem['ID']);
@@ -54,7 +54,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
                     $nomTracaItem['nomTracaDetail'] = $queryNom->fetchAll();
                     foreach ($nomTracaItem['nomTracaDetail'] as $key => $Mat) {
                         $sql = "SELECT `DESIGNATION SIMPLIFIEE` FROM t_materials WHERE `ID` = :idMat";
-                        $queryDes = $con->createQuery($sql, ['idMat' => $Mat['ARTICLE']]);
+                        $queryDes = $con->createQuery($sql, ['idMat' => $Mat['ID ARTICLE']]);
                         $nomTracaItem['nomTracaDetail'][$key]['DESIGNATION'] = $queryDes->fetchColumn();
                     }
                     break;
@@ -66,6 +66,11 @@ foreach ($nomTracaGroup as $key_1 => $group) {
             if (gettype($keyTraca) != 'boolean') {
                 $nbTraca = $nbTraca + 1;
                 $nomTracaItem['traca'] = $traca[array_search($nomTracaItem['ID'], array_column($traca, 'ID FAC'))];
+                
+                $sql = "SELECT * FROM t_traca_users WHERE `ID_TRACA` = :idTraca";
+                $queryUsers = $con->createQuery($sql, ['idTraca' => $traca[$keyTraca]['ID']]);
+                $nomTracaItem['traca']['USERS'] = $queryUsers->fetchAll();
+
                 switch ($nomTracaItem['TYPE_TRACA']) {
                     case 'OF':
                         $sql = "SELECT * FROM t_traca_of WHERE `ID TRACA` = :idTraca";
@@ -84,6 +89,7 @@ foreach ($nomTracaGroup as $key_1 => $group) {
                         break;
                 }
                 $nomTracaItem['traca']['tracaDetails'] = $queryTraca->fetchAll();
+                
                 $keyTraca = 'Undefined';
             }
             array_push($itemOfGroup, $nomTracaItem);

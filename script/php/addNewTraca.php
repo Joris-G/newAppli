@@ -12,8 +12,19 @@ $idTraca = $query->fetch();
 $idTracaBis = implode($idTraca);
 switch ($_GET['typeTraca']) {
     case 'Matiere':
-        $sql = "INSERT INTO t_nom_traca_matiere (`ID TRACA`,`ARTICLE`) VALUES (:idtraca,:material)";
-        $query = $con->createQuery($sql, ['idtraca' => implode($idTraca), 'material' => $_GET['material']]);
+        $sql = "SELECT * FROM t_materials WHERE `ARTICLE` = :article";
+        $query = $con->createQuery($sql, ['article' => $_GET['material']]);
+        $result = $query->fetch();
+        if ($result == false) {
+            $sql = "INSERT INTO `t_materials`( `ARTICLE`, `DESIGNATION`) VALUES (:article,:designation)";
+            $query = $con->createQuery($sql, ['article' => $_GET['material'], 'designation' => $_GET['designation']]);
+            $sql = "SELECT ID FROM t_materials WHERE `ARTICLE` = :article";
+            $query = $con->createQuery($sql, ['article' => $_GET['material']]);
+            $result = $query->fetchColumn();
+            $idMat = $result;
+        }
+        $sql = "INSERT INTO t_nom_traca_matiere (`ID TRACA`,`ID ARTICLE`) VALUES (:idtraca,:material)";
+        $query = $con->createQuery($sql, ['idtraca' => implode($idTraca), 'material' => $idMat]);
         break;
     case 'OF':
         $table = json_decode($_GET['partList'], true);
@@ -35,4 +46,3 @@ switch ($_GET['typeTraca']) {
         var_dump('try again');
         break;
 }
-    # code...

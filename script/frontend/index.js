@@ -5,7 +5,6 @@ import {
     SelectItem,
     DownArrowStatus,
     Bouton,
-    SAPLOGON
 } from "../toolBox.js";
 
 
@@ -25,7 +24,3 @@ inputTest.onkeypress = (event) => {
     } else { console.log(false); }
     console.log(event);
 }
-
-const SAP = new SAPLOGON('JGRANGIER', 'Socata01');
-console.log(SAP);
-if (SAP) SAP.SAPlogon();

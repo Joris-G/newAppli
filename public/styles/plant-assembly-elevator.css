@@ -1,1 +1,25 @@
 @import "../styles/defaultStyle.css";
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.assembly-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 50%;
+    width: 90%;
+    align-items: center;
+    border: 1px solid white;
+    margin: 100px;
+    padding: 10px;
+}
+
+.assembly-line div:first-child {
+    width: fit-content;
+    padding-right: 5px;
+    text-align: left;
+}

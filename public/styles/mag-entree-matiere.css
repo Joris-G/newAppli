@@ -1,1 +1,19 @@
 @import "../styles/defaultStyle.css";
+.two-columns {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 1fr 1fr;
+}
+
+.column-one {
+    grid-column: 1/2;
+}
+
+.column-two {
+    grid-column: 2/3;
+}
+
+.two-columns label,
+.two-columns input {
+    margin-bottom: 4vh;
+}

@@ -35,7 +35,6 @@ export class Assembly {
 
 
     upDateTracaPage() {
-        this.buildTitleTopBar();
         addLoader();
         console.log(this);
         this.getBoxName(this.workOrder, "LH").then(boxName => {
@@ -224,30 +223,6 @@ export class Assembly {
         divOperation.append(divOperationsOverview, divOperationDetails);
         divWorkWindow.append(divGroupDescription, divOperation);
         return divWorkWindow;
-    }
-
-    /**
-     *Construit la barre de titre
-     *
-     */
-    buildTitleTopBar() {
-        let titleTopBar = document.querySelector('.title-top')
-        if (titleTopBar) {
-            titleTopBar.remove();
-        }
-        titleTopBar = document.createElement('div');
-        titleTopBar.classList.add('title-top');
-        const divTitle = document.createElement('div');
-        const title = "Assemblage";
-        divTitle.innerHTML = title.toUpperCase();
-        divTitle.classList.add("title-font");
-        const divBoxName = document.createElement('div');
-        divBoxName.innerHTML = "Box Name : ";
-        divBoxName.id = 'box-name';
-        const divGlobalProgress = document.createElement('div');
-        divGlobalProgress.id = "global-progress";
-        titleTopBar.append(divBoxName, divTitle, divGlobalProgress)
-        document.querySelector('.module').appendChild(titleTopBar);
     }
 
     showOperation(idOp) {

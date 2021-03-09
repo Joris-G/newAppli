@@ -1,0 +1,62 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+@media print {
+    html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+    @page {
+        margin: 0;
+        padding: 0;
+    }
+    #print-area>*:nth-child(3n) {
+        padding: 0;
+        page-break-after: always;
+    }
+}
+
+#print-area {
+    height: 297mm;
+    width: 210mm;
+    display: table;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-left: 7.2mm;
+    padding-right: 7.2mm;
+    background-color: antiquewhite;
+}
+
+#print-area>* {
+    margin-top: 13.1mm;
+    margin-bottom: 12.1mm;
+    padding-right: 2.5mm;
+    display: inline-block;
+}
+
+#print-area>*:nth-child(3n) {
+    padding: 0;
+    page-break-after: always;
+}
+
+.sticker {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.5);
+    width: 67.5mm;
+    height: 35.9mm;
+}
+
+.sticker>*:first-child {
+    text-align: center;
+    justify-self: center;
+    padding: 4mm;
+}
+
+.sticker>*:nth-child(2) {
+    padding: 8mm 2mm;
+}

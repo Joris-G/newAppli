@@ -80,10 +80,10 @@ export class SanctionBouton {
         divButtons.classList.add('sanction-choice');
         this.btnConform = document.createElement('div');
         this.btnConform.innerHTML = 'CONFORME';
-        this.btnConform.classList.add('btn', 'btn-compliant', 'btn-primary', 'btn-L');
+        this.btnConform.classList.add('btn', 'btn-compliant', 'btn-primary', 'btn-M', 'btn-radius');
         this.btnNonConform = document.createElement('div');
         this.btnNonConform.innerHTML = 'NON-CONFORME';
-        this.btnNonConform.classList.add('btn', 'btn-primary', 'btn-L', 'btn-not-compliant');
+        this.btnNonConform.classList.add('btn', 'btn-primary', 'btn-M', 'btn-not-compliant', 'btn-radius');
         divButtons.append(this.btnConform, this.btnNonConform);
 
         this.btnConform.onclick = () => {
@@ -162,7 +162,7 @@ export class Bouton {
     drawButton() {
         switch (this.style) {
             case 'confirm':
-                this.btn.classList.add('btn', 'bouton-disable', 'btn-primary');
+                this.btn.classList.add('btn', 'bouton-disable', 'btn-primary', 'btn-radius');
                 this.btn.innerText = 'CONFIRMER';
                 this.btn.id = 'confirm-button';
                 break;
@@ -321,34 +321,34 @@ export class Input {
         this.input.classList.remove('active-input');
     }
     setAction(action = null) {
-        console.log(this.style);
-
         switch (this.style) {
             case 'scan':
                 this.input.onchange = () => {
-                    console.log(this.input.value);
+                    console.log(`Scan inout :  ---   ${this.input.value}   ---`);
                     switch (this.scanProcessing().TYPE) {
                         case 'IDFAC':
                             this.controller.idFacAction(this.input.value);
                             break;
                         case 'OF':
-                            console.log('OF action');
+                            //console.log('OF action');
                             this.controller.ofAction(this.scanProcessing().DATA);
                             break;
                         case 'CTRL-TOOL':
-                            console.log('Control tool action');
+                            //console.log('Control tool action');
                             this.controller.ctrlToolAction(this.scanProcessing().DATA);
                             break;
                         case 'MAT':
-                            console.log('Material scan action');
+                            //console.log('Material scan action');
+                            console.log(this.scanProcessing().DATA);
                             this.controller.materialAction(this.scanProcessing().DATA);
+
                             break;
                         case 'USER':
-                            console.log('User scan action');
+                            //console.log('User scan action');
                             document.querySelector('.divSecondaryUser').innerHTML = this.scanProcessing().DATA;
                             break;
                         default:
-                            console.log('default');
+                            //console.log('default');
                             this.controller.idFacAction(this.input.value);
                             break;
                     }
@@ -559,7 +559,7 @@ export class DownArrowStatus {
 export async function doAjaxThings(url, responseType) {
     // await code here
     let result = await makeRequest("GET", url, responseType)
-    console.log(result);
+        //console.log(result);
     return result;
     // code below here will only execute when await makeRequest() finished loading
 
