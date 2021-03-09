@@ -64,3 +64,24 @@ body {
 .login-qrcode img:hover {
     width: 120px;
 }
+
+.scan-selected {
+    animation-name: animScanBtn;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    border-radius: 10px;
+}
+
+@keyframes animScanBtn {
+    from {
+        border: var(--perso-color-rougeDaher) 3px solid;
+    }
+    to {
+        border: none;
+    }
+}
+
+.scan-selected img {
+    width: 120px;
+}

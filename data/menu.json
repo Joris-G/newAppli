@@ -1,6 +1,7 @@
 [{
         "id": 1,
         "name": "Fichier",
+        "roles": ["COMPAGNON", "CONTROLE", "METHODE", "CHEF", "ADMIN"],
         "item": [{
                 "id": 1,
                 "name": "Moulage",
@@ -31,23 +32,23 @@
             },
             {
                 "id": 5,
-                "name": "Utilisateur",
-                "secteur": "TOUS",
-                "file": "OPERATEURS.php",
-                "roles": ["METHODE", "CHEF", "ADMIN"]
-            },
-            {
-                "id": 6,
                 "name": "Editeur d'étiquettes",
                 "secteur": "COMPOSITE",
                 "file": "edit-label.html",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },
             {
-                "id": 7,
+                "id": 6,
                 "name": "Création Assemblage",
                 "secteur": "COMPOSITE",
                 "file": "gest-create-assy.php",
+                "roles": ["METHODE", "GESTIONNAIRE", "ADMIN"]
+            },
+            {
+                "id": 7,
+                "name": "Impression OF",
+                "secteur": "COMPOSITE",
+                "file": "gest-edit-of.php",
                 "roles": ["METHODE", "GESTIONNAIRE", "ADMIN"]
             },
             {
@@ -62,6 +63,7 @@
     {
         "id": 2,
         "name": "Option",
+        "roles": ["METHODE", "ADMIN", "CONTROLE"],
         "item": [{
                 "id": 1,
                 "name": "Thème",
@@ -79,9 +81,9 @@
             {
                 "id": 3,
                 "name": "Utilisateur",
-                "secteur": "TOUS",
-                "file": "user.html",
-                "roles": ["METHODE", "ADMIN"]
+                "secteur": "COMPOSITE",
+                "file": "module-utilisateur.php",
+                "roles": ["METHODE", "ADMIN", "COMPAGNON", "CONTROLE", "CHEF"]
             },
             {
                 "id": 4,
@@ -102,6 +104,7 @@
     {
         "id": 3,
         "name": "Vues d'ensemble",
+        "roles": ["METHODE", "CHEF", "ADMIN"],
         "item": [{
                 "id": 1,
                 "name": "GULFSTREAM ELEVATOR",
@@ -119,7 +122,7 @@
             {
                 "id": 3,
                 "name": "GULFSTREAM WINGLET",
-                "secteur": "TOUS",
+                "secteur": "COMPOSITE",
                 "file": "user.html",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },

@@ -138,59 +138,61 @@ function upDateTracaPage() {
 function buildMatierialRecorder() {
     const divMatiere = document.createElement('div');
     divMatiere.id = "recorder";
-
     const divARemplir = document.createElement('div');
-
-    const divRefSapMatiere = document.createElement('div');
-    divRefSapMatiere.id = 'ref-sap-material';
+    divARemplir.classList.add('two-columns');
     const inputRefSap = document.createElement('input');
     inputRefSap.id = 'input-ref-sap';
+    inputRefSap.classList.add('column-two');
     const lblRefSap = document.createElement('label');
     lblRefSap.innerHTML = 'Référence SAP';
-    divRefSapMatiere.append(lblRefSap, inputRefSap);
+    lblRefSap.classList.add('column-one');
     inputRefSap.onblur = () => {
         let divDesignation = document.getElementById('div-designation');
         if (divDesignation) {
             divDesignation.remove();
         }
-        divDesignation = document.createElement('div');
-        divDesignation.id = 'div-designation';
         const designation = document.createElement('div');
         designation.id = 'des-mat';
+        designation.classList.add('column-two');
         const lblDesignation = document.createElement('label');
         lblDesignation.innerHTML = 'Designation matière : ';
+        lblDesignation.classList.add('column-one');
         promListMatiere.then(listOfMaterials => {
             const matiere = listOfMaterials.find(matiere => matiere.ARTICLE == inputRefSap.value);
             designation.innerHTML = matiere['DESIGNATION SIMPLIFIEE'];
-        })
-        divDesignation.append(lblDesignation, designation);
-        divRefSapMatiere.appendChild(divDesignation);
+        });
+        divARemplir.append(designation, lblDesignation);
     }
 
-    const divBatchNumber = document.createElement('div');
     const inputBatchNumber = document.createElement('input');
     inputBatchNumber.id = 'input-batch-number';
+    inputBatchNumber.classList.add('column-two');
     const lblBatchNumber = document.createElement('label');
+    lblBatchNumber.classList.add('column-one');
     lblBatchNumber.innerHTML = 'NUMERO DE LOT';
-    divBatchNumber.append(lblBatchNumber, inputBatchNumber);
 
-    const divPeremption = document.createElement('div');
+
+
+
+
     const inputShelflifeDate = document.createElement('input');
     inputShelflifeDate.type = 'date';
     inputShelflifeDate.id = 'input-shelflifeDate';
+    inputShelflifeDate.classList.add('column-two');
     const lblShelflifeDate = document.createElement('label');
+    lblShelflifeDate.classList.add('column-one');
     lblShelflifeDate.innerHTML = 'Date de péremption';
-    divPeremption.append(lblShelflifeDate, inputShelflifeDate);
 
-    const divNumberOfProducts = document.createElement('div');
+
     const inputNbOfProducts = document.createElement('input');
     inputNbOfProducts.type = 'number';
     inputNbOfProducts.id = 'input-number-of-products';
+    inputNbOfProducts.classList.add('column-two');
     const lblNumberOfProducts = document.createElement('label');
     lblNumberOfProducts.innerHTML = 'Nombre de produits';
-    divNumberOfProducts.append(lblNumberOfProducts, inputNbOfProducts);
+    lblNumberOfProducts.classList.add('column-one');
 
-    divARemplir.append(divRefSapMatiere, divBatchNumber, divPeremption, divNumberOfProducts);
+    divARemplir.append(lblRefSap, inputRefSap, lblBatchNumber, inputBatchNumber, lblShelflifeDate, inputShelflifeDate, lblNumberOfProducts, inputNbOfProducts);
 
     inputBatchNumber.onchange = () => {
         checkIfComplete();

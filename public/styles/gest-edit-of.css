@@ -1,0 +1,21 @@
+@import "../styles/defaultStyle.css";
+.content-gest-edit-of {
+    display: grid;
+    grid-template: "a a" "b c" 1fr;
+}
+
+.input-csv-file {
+    width: 100%;
+    height: fit-content;
+}
+
+input,
+select {
+    margin-bottom: 5px;
+}
+
+.new-template {
+    display: grid;
+    grid-template: "tp-top tp-top" "tp-name tp-name" "tp-format tp-layout";
+    height: 100%;
+}

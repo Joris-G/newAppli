@@ -15,30 +15,15 @@
     .divECME {
         page-break-inside: avoid;
     }
-}
-
-
-/* nav */
-
-.nav {
-    display: none;
-}
-
-body {
-    width: 210mm;
-    height: 297mm;
-    display: grid;
-    grid-template-columns: repeat(6, 100px);
-    grid-template-rows: 130px;
-    overflow: visible;
-    justify-content: space-around;
+    .divUser {
+        page-break-inside: avoid;
+    }
 }
 
 .divUser {
     text-align: center;
     margin: 8px;
     padding: 0;
-    page-break-inside: avoid;
 }
 
 .divUser img {

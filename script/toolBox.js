@@ -339,7 +339,9 @@ export class Input {
                             break;
                         case 'MAT':
                             //console.log('Material scan action');
+                            console.log(this.scanProcessing().DATA);
                             this.controller.materialAction(this.scanProcessing().DATA);
+
                             break;
                         case 'USER':
                             //console.log('User scan action');

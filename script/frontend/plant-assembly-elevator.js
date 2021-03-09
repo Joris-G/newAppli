@@ -22,8 +22,17 @@ class Model {
 class ViewContent {
     constructor() {}
 
-    drawInitPage(_listRefOrdo) {
+    drawAssemblyLine(assemblyProgress) {
         const content = this.getElement('.content');
+        const leftDatas = assemblyProgress[0];
+        const rightDatas = assemblyProgress[1];
+        const leftContainer = this.getElement('#line-left');
+        const rightContainer = this.getElement('#line-right');
+        assemblyProgress[0].forEach(woStation => {
+            if (woStation.PROGRESS != 0) {
+
+            }
+        });
     }
 
     /**
@@ -41,11 +50,9 @@ class ViewContent {
                 className.forEach(strClass => {
                     element.classList.add(strClass);
                 });
-
             } else {
                 element.classList.add(className);
             }
-
         }
         return element;
     }
@@ -53,7 +60,6 @@ class ViewContent {
     appendElement(selector, element) {
         this.getElement(selector).appendChild(element);
     }
-
 
     /**
      *Retrieve an element from the DOM
@@ -91,11 +97,10 @@ class Controller {
     initPage() {
         const program = 1;
         const promGetProgress = this.model.getProgress(program);
-        promGetProgress.then(result => {
-            console.log(result);
-        })
+        promGetProgress.then(progress => {
+            console.log(progress);
+            this.view.drawAssemblyLine(progress);
+        });
     }
-
-
 }
 const processOperatorAPI = new Controller(new Model(), new ViewContent());

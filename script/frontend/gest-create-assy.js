@@ -68,6 +68,7 @@ class ViewContent {
         const boxName = this.createElement('input', 'boxName');
         ofOrdo.id = this.getElement('.article-ordo').value;
         this.getElement('.divOrdo').append(lblOfOrdo, ofOrdo, lblBoxName, boxName);
+        console.log(_listChildArticle);
         _listChildArticle.forEach((childArticle, index) => {
             const divChild = this.createElement('div', 'ordo-child');
             const article = this.createElement('div', 'article');
@@ -163,7 +164,7 @@ class Controller {
         //this.view.addTitle("Création de l'assemblage");
         const _listRefOrdo = [
             ['ELEVATOR LH - ORDO', 7259753],
-            ['ELEVATOR RH - ORDO', 7172242]
+            ['ELEVATOR RH - ORDO', 7259754]
         ];
         this.view.drawInitPage(_listRefOrdo);
 

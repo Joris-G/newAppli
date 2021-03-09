@@ -19,6 +19,7 @@ const body = document.querySelector('body')
     // divMsgBox.appendChild(divTitle)
     // divMsgBox.appendChild(divMsg)
 function login(userName, password = null) {
+    console.log(userName,password);
     if (password === null) {
         doAjaxThings(`../script/php/authentification.php?matricule=${userName}`, 'json').then(
             user => {
@@ -44,23 +45,19 @@ function connexionAction(user) {
             switch (user['ROLE']) {
                 case 'COMPAGNON':
                     console.log('Rôle Compagnon');
-                    open('./op-moulage-composite.php', true);
-                    window.close();
+                    location.href = './op-moulage-composite.php';
                     break;
                 case 'ADMIN':
                     console.log('Rôle Admin');
-                    open('./index.php', true);
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'METHODE':
                     console.log('Rôle Préparateur');
-                    open('./prep-moulage-composite.php', true);
-                    window.close();
+                    location.href = './prep-moulage-composite.php';
                     break;
                 default:
                     console.log('defaut');
-                    open('./index.php', true);
-                    window.close();
+                    location.href = './index.php';
                     break;
             }
             break;
@@ -69,23 +66,19 @@ function connexionAction(user) {
             switch (user['ROLE']) {
                 case 'COMPAGNON':
                     console.log('Rôle Compagnon');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'ADMIN':
                     console.log('Rôle Admin');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'METHODE':
                     console.log('Rôle Préparateur');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 default:
                     console.log('defaut')
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php'
                     break;
             }
             break;
@@ -94,23 +87,19 @@ function connexionAction(user) {
             switch (user['ROLE']) {
                 case 'COMPAGNON':
                     console.log('Rôle Compagnon');
-                    open('./op-assemblage-composite.php', true)
-                    window.close();
+                    location.href = './op-assemblage-composite.php';
                     break;
                 case 'ADMIN':
                     console.log('Rôle Admin');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'METHODE':
                     console.log('Rôle Préparateur');
-                    open('./prep-assemblage-composite.php', true)
-                    window.close();
+                    location.href = './prep-assemblage-composite.php';
                     break;
                 default:
                     console.log('defaut')
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
             }
             break;
@@ -119,23 +108,19 @@ function connexionAction(user) {
             switch (user['ROLE']) {
                 case 'COMPAGNON':
                     console.log('Rôle Compagnon');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'ADMIN':
                     console.log('Rôle Admin');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 case 'METHODE':
                     console.log('Rôle Préparateur');
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
                 default:
                     console.log('defaut')
-                    open('./index.php', true)
-                    window.close();
+                    location.href = './index.php';
                     break;
             }
             break;
@@ -174,6 +159,7 @@ body.appendChild(loginTextArea)
 
 const imgScan = document.getElementById('img-scan');
 imgScan.onclick = () => {
+    imgScan.classList.toggle('scan-selected');
     loginTextArea.focus();
 }
 
@@ -183,3 +169,11 @@ btnLogin.onclick = () => {
     const psw = document.getElementById('mdp').value;
     login(userName, psw);
 }
+
+document.addEventListener('click', (ev) => {
+    const btnScan = document.getElementById('img-scan');
+    if (ev.target != btnScan) {
+        imgScan.classList.remove('scan-selected');
+        loginTextArea.blur();
+    }
+})

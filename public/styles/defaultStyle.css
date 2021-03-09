@@ -107,7 +107,7 @@ body {
 
 .title-top {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr 4fr 1fr;
     justify-content: left;
     align-items: center;
     margin: 10px;
@@ -119,8 +119,8 @@ body {
 
 .title-font {
     justify-self: center;
-    font-size: 30px;
-    color: white;
+    font-size: 3vw;
+    grid-column: 2 / 3;
 }
 
 #global-progress {
