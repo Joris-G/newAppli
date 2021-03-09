@@ -121,10 +121,17 @@ class MenuView {
         divTime.innerHTML = `${time.hour}:${time.minute}`;
         setTimeout(() => {
             time = this.syncTime();
-            divTime.innerHTML = `${time.hour}:${time.minute}`;
+            const minuteTxt = () => {
+                if (time.minute < 10) {
+                    return `0${time.minute}`;
+                } else {
+                    return time.minute;
+                }
+            }
+            divTime.innerHTML = `${time.hour}:${minuteTxt()}`;
             setInterval(() => {
                 time = this.syncTime();
-                divTime.innerHTML = `${time.hour}:${time.minute}`;
+                divTime.innerHTML = `${time.hour}:${minuteTxt()}`;
             }, 60000);
         }, (60 - time.second) * 1000);
         menuBar.appendChild(divTime);

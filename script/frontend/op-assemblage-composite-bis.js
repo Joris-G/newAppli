@@ -915,8 +915,8 @@ class Controller {
         }
     }
 
-
     materialAction(_inputMaterial) {
+        console.log(_inputMaterial);
         const idOperation = this.view.getElement('.operation').id;
         const id = idOperation.split('-')[1];
         const traca = this.model.getTraca(id)
@@ -932,8 +932,8 @@ class Controller {
                     } else {
                         console.log('traca pas complete');
                         console.log(_inputMaterial);
-                        console.log(tracaDetail.ARTICLE);
-                        if (tracaDetail.ARTICLE == _inputMaterial[0]) {
+                        console.log(tracaDetail);
+                        if (tracaDetail['ID ARTICLE'] == _inputMaterial[0]) {
                             mat = true;
                             console.log("C'est la bonne matiere");
                             const tracaCells = document.getElementById(tracaDetail['ID']);
@@ -1257,6 +1257,7 @@ class Controller {
                 break;
             case 'Matiere':
                 const listMatiere = this.getTraca();
+                console.log(listMatiere);
                 this.model.saveTracaMatiere(_workOrder, _operation.ID, listMatiere, _usersMatricule).then(() => {
                     this.afterSaveData();
                 });

@@ -19,6 +19,7 @@ const body = document.querySelector('body')
     // divMsgBox.appendChild(divTitle)
     // divMsgBox.appendChild(divMsg)
 function login(userName, password = null) {
+    console.log(userName,password);
     if (password === null) {
         doAjaxThings(`../script/php/authentification.php?matricule=${userName}`, 'json').then(
             user => {

@@ -32,23 +32,23 @@
             },
             {
                 "id": 5,
-                "name": "Utilisateur",
-                "secteur": "COMPOSITE",
-                "file": "OPERATEURS.php",
-                "roles": ["METHODE", "CHEF", "ADMIN"]
-            },
-            {
-                "id": 6,
                 "name": "Editeur d'étiquettes",
                 "secteur": "COMPOSITE",
                 "file": "edit-label.html",
                 "roles": ["METHODE", "CHEF", "ADMIN"]
             },
             {
-                "id": 7,
+                "id": 6,
                 "name": "Création Assemblage",
                 "secteur": "COMPOSITE",
                 "file": "gest-create-assy.php",
+                "roles": ["METHODE", "GESTIONNAIRE", "ADMIN"]
+            },
+            {
+                "id": 7,
+                "name": "Impression OF",
+                "secteur": "COMPOSITE",
+                "file": "gest-edit-of.php",
                 "roles": ["METHODE", "GESTIONNAIRE", "ADMIN"]
             },
             {
@@ -63,7 +63,7 @@
     {
         "id": 2,
         "name": "Option",
-        "roles": ["METHODE", "ADMIN"],
+        "roles": ["METHODE", "ADMIN", "CONTROLE"],
         "item": [{
                 "id": 1,
                 "name": "Thème",
@@ -82,8 +82,8 @@
                 "id": 3,
                 "name": "Utilisateur",
                 "secteur": "COMPOSITE",
-                "file": "user.html",
-                "roles": ["METHODE", "ADMIN"]
+                "file": "module-utilisateur.php",
+                "roles": ["METHODE", "ADMIN", "COMPAGNON", "CONTROLE", "CHEF"]
             },
             {
                 "id": 4,
